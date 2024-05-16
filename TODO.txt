@@ -1,0 +1,10 @@
+1.
+    Quando scelgo la strategia che fa predizione devo scegliere come comportarmi.
+    Problema: se la strategia viene scelta a metà giornata per il giorno 1 potrei avere dei problemi.
+    potrei fare che per il giorno uno raccolgo solo dati ed inizio a fare previsione solo dal giorno 2.
+
+2.
+    utilizzare il file modelloPannello per modellizzare la potenza in ingresso del pannello solare
+
+3.
+    mi serve avere un modello dei consumi della fpga
