@@ -1,12 +1,12 @@
 #include <iostream>
 #include "epever.h"
-#include <unistd.h>
 
-#define BAUD 9600
-#define PARITY 'N'
+#define BAUD 115200
+#define PARITY 'NN'
 #define DATA_BIT 8
 #define STOP_BIT 1
 
+// epever::epever(){}
 epever::epever(const std::string &device)
 {
     ctx= modbus_new_rtu(device.c_str(), BAUD, PARITY, DATA_BIT, STOP_BIT);
@@ -14,20 +14,13 @@ epever::epever(const std::string &device)
         throw std::runtime_error("Unable to create the libmodbus context");
     }
     modbus_set_slave(ctx, 1);
-    //modbus_rtu_set_serial_mode(ctx,1);
+    modbus_rtu_set_serial_mode(ctx,MODBUS_RTU_RS485);
+    modbus_set_response_timeout(ctx, 3, 0);
 
     if (modbus_connect(ctx) == -1) {
         modbus_free(ctx);
         throw std::runtime_error("Connection failed.");
     }
-
-    
-
-    usleep(100000);
-    uint16_t dest[16];
-    modbus_read_input_registers(ctx, 0x3103, 1, dest);
-    printf("temp = %d\n", dest[0]);
-    // ASSERT_TRUE(ctx == 1, "");
 }
 
 epever::~epever()
@@ -42,7 +35,7 @@ void epever::clean_and_throw_error() const {
 
 float epever::getBatteryVoltage() const {
     uint16_t dest[16];
-    modbus_set_debug(ctx,TRUE);
+    // modbus_set_debug(ctx,TRUE);
     if(modbus_read_input_registers(ctx, 0x331A, 1, dest)==-1){
         clean_and_throw_error();
     }else{
@@ -50,6 +43,7 @@ float epever::getBatteryVoltage() const {
     }
 }
     
+
 float epever::getLoadCurrent() const {
     uint16_t dest[16];
     //modbus_set_debug(ctx,TRUE);
@@ -72,6 +66,47 @@ float epever::getLoadVoltage() const {
 
 }
 
+//ottengo la potenza in uscita dalla batteria
+float epever::getOutputPower() const {
+    return epever::getLoadVoltage()*epever::getLoadCurrent();
+}
+
+float epever::getBatteryCurrentL() const {
+    uint16_t dest[2];
+    // modbus_set_debug(ctx,TRUE);
+    if(modbus_read_input_registers(ctx, 0x310E, 2, dest)==-1){
+        clean_and_throw_error();
+    }else{
+        uint32_t result = (dest[0]<<16)+dest[1];
+        return result;
+    }
+}
+
+float epever::getBatteryCurrentStatus() const {
+    uint16_t dest[2];
+    // modbus_set_debug(ctx,TRUE);
+    if(modbus_read_input_registers(ctx, 0x310B, 2, dest)==-1){
+        clean_and_throw_error();
+    }else{
+        uint32_t result = (dest[0]<<16)+dest[1];
+        return result;
+    }
+}
+
+
+
+
+float epever::getChargingPower() const {
+    uint16_t dest[2];
+    // modbus_set_debug(ctx,TRUE);
+    if(modbus_read_input_registers(ctx, 0x3106, 2, dest)==-1){
+        clean_and_throw_error();
+    }else{
+        uint32_t result = (dest[0]<<16)+dest[1];
+        return result;
+    }
+}
+
 float epever::getLoadPower() const {
     uint16_t dest[2];
     // modbus_set_debug(ctx,TRUE);
@@ -83,16 +118,16 @@ float epever::getLoadPower() const {
     }
 }
 
-float epever::getBatteryCurrent() const {
-    uint16_t dest[2];
-    // modbus_set_debug(ctx,TRUE);
-    if(modbus_read_input_registers(ctx, 0x311B, 2, dest)==-1){
+float epever::getDischargeCurrentEqui() const {
+    uint16_t dest[1];
+    //modbus_set_debug(ctx,TRUE);
+    if(modbus_read_input_registers(ctx, 0x310D, 1, dest)==-1){
         clean_and_throw_error();
     }else{
-        uint32_t result = (dest[0]<<16)+dest[1];
-        return result;
-    } 
+        return dest[0]*0.01; 
+    }
 }
+  
    
 float epever::getChargeCurrent() const {
     uint16_t dest[1];
@@ -122,18 +157,6 @@ float epever::getArrayPower() const {
         return result; 
     }
 }
-
-float epever::getBatteryPower() const {
-    uint16_t dest[2];
-    //modbus_set_debug(ctx,TRUE);
-    if(modbus_read_input_registers(ctx, 0x3106, 2, dest)==-1){
-        clean_and_throw_error();
-    }else{
-        uint32_t result = (dest[0]<<16)+dest[1];
-        return result; 
-    }
-}
-
     std::bitset<16> epever::getChargingEquipmentStatus() const {
     uint16_t dest;
     //modbus_set_debug(ctx,TRUE);
@@ -358,7 +381,8 @@ float epever::getBatteryTemp() const {
     if(modbus_read_input_registers(ctx, 0x3110, 1, dest)==-1){
         clean_and_throw_error();
     }else{
-        return dest[0];  
+        float res=dest[0];
+        return res/100;  
     }
 }
     

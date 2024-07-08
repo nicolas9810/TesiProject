@@ -1,4 +1,3 @@
-
 #include <modbus.h>
 #include <string>
 #include <bitset>
@@ -73,6 +72,7 @@ public:
      * Epever class constructor.
      * @param device "/dev/ttyXRUSB0" 
      */
+    // epever();
     epever(const std::string & device);
     virtual ~epever();
 
@@ -85,10 +85,6 @@ public:
     virtual float maxBatteryVoltageToday() const override;
     virtual float minBatteryVoltageToday() const override;
     virtual float getBatteryTemp() const override;
-
-
-
-
     
     /**
      * The percentage of battery's remaining capacity.
@@ -139,7 +135,11 @@ public:
     virtual float getLoadCurrent() const override;
     virtual float getLoadVoltage() const override;
     float getLoadPower() const;
-    float getBatteryCurrent() const;
+    float getChargingPower() const;
+    float getBatteryCurrentL() const;
+    float getDischargeCurrentEqui() const;
+    float getOutputPower() const ;
+    float getBatteryCurrentStatus() const;
 
 
     /**
@@ -174,8 +174,6 @@ public:
     float getChargingLimitV() const;
     void setChargingLimitV(float v);
     float getBoosDuration() const;
-    float getBatteryPower() const;
-
     
     /**
      * @param min minutes
@@ -225,4 +223,3 @@ public:
     void loadTestModeOn();
     void loadTestModeOff();
 };
-

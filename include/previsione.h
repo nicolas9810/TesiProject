@@ -1,13 +1,22 @@
-#include "modelloPannello.h"
+#ifndef PREVISIONE_H
+#define PREVISIONE_H
+
+#include "GreenPlantModel.h"
 
 
-float previsioneEnergiaDisponibile(int n);
+double previsioneEnergiaDisponibile(int n,int min);
 void inizializzaMatrice();
-int setEnergia(float e);
+int setEnergia(double e,int min);
 void nuovoGiorno();
-void previsioneDelGiorno(int c);
+void previsioneDelGiorno(int c, double e);
+double recursiveEWMA(float alpha,int index, int giorno);
 void media();
 int setEnergia(int n,int e);
-float gapk(int i);
-float prodottoScalare(float v1[],float v2[]);
+double gapk(int i);
+double prodottoScalare(double v1[],double v2[], int j);
 void inizializzaMatriceTest(GreenPlantModel model);
+void printMatriceEnergetica();
+void printPrevisioni();
+void setEner(int i,int j,double e);
+
+#endif //PREVISIONE_H

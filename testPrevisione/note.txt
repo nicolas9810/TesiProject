@@ -1,0 +1,5 @@
+to compile run:
+g++ -g -pthread mainPlantModel.cpp tempo.cpp GreenPlantModel.cpp previsione.cpp -o main -Iinclude
+
+to run with gdb 
+ gdb --args ./main 700

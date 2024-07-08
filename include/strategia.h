@@ -23,4 +23,4 @@ public:
     virtual int strategia(float batteryStatus)=0;
 };
 
-#endif
+#endif //STRATEGIA

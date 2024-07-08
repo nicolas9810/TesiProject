@@ -6,7 +6,7 @@ Strategia::Strategia(epever* d){
     device=d;
 }
 bool Strategia::getBatteryStatus(){
-    float flag= device->getBatteryCurrent();
+    float flag= device->getBatteryCurrentStatus();
     if(flag>0){
         return CHARGING;
     }
@@ -17,7 +17,7 @@ bool Strategia::getBatteryStatus(){
 
 void Strategia::setConsumi(int c){
 
-    arrayConsumi[c].consumo=getDevice()->getBatteryPower();
+    arrayConsumi[c].consumo=getDevice()->getOutputPower();
 
 }
 

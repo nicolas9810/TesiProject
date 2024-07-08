@@ -5,26 +5,27 @@
 
 
 // idealmente sono da aggiustare dinamenicamente
-const int alfa = 0.7;
+const float alfa = 0.6;
 const int kappa = 4;
 
 int oggi= DAYS-1;
 int ieri = DAYS-2;
 
-int matrice_energetica [DAYS][N];
-// int matrice_previsione_energetica [DAYS][N];
-float medie_energetiche [N];
+double matrice_energetica [DAYS][NN];
+// int matrice_previsione_energetica [DAYS][NN];
+double medie_energetiche [NN];
+double previsioni[NN];
 
-float previsioneEnergiaDisponibile(int n){
-    time_t now = time(0); // get current date and time  
-    tm* ltm = localtime(&now);  
-    int hour= ltm->tm_hour;
-    int min= ltm->tm_min;
-    min=min+hour*60;
+double previsioneEnergiaDisponibile(int n,int min){
+    // time_t now = time(0); // get current date and time  
+    // tm* ltm = localtime(&now);  
+    // int hour= ltm->tm_hour;
+    // int min= ltm->tm_min;
+    // min=min+hour*60;
     int slot=min/FREQUENZA;
-    float result;
+    double result;
     int c=0;
-    for(int i=slot;i<slot+n && i<N;i++){
+    for(int i=slot;i<slot+n && i<NN;i++){
         c++;
         result+=matrice_energetica[DAYS][i];
     } 
@@ -32,21 +33,29 @@ float previsioneEnergiaDisponibile(int n){
 }
 
 
-int setEnergia(float e){
-    time_t now = time(0); // get current date and time  
-    tm* ltm = localtime(&now);  
-    int hour= ltm->tm_hour;
-    int min= ltm->tm_min;
-    min=min+hour*60;
-    int slot=min/FREQUENZA;
-    matrice_energetica[oggi][slot];
+int setEnergia(double e,int min){
+    // time_t now = time(0); // get current date and time  
+    // tm* ltm = localtime(&now);  
+    // int hour= ltm->tm_hour;
+    // int min= ltm->tm_min;
+    // min=min+hour*60;
+    int slot=(min/60)-1;
+    std::cout<< "slot numero "<<slot<< " "<< min  <<std::endl;
+    std::cout << "set energia " << e << "W in slot " << slot << "  oggi " <<std::endl;
+
+    matrice_energetica[oggi][slot]=e;
     return slot;
 }
 
+void setEner(int i,int j,double e){
+    matrice_energetica[i][j]=e;
+}
+
+
 void inizializzaMatrice(){
     for(int i=0;i<DAYS;i++){
-        for(int j=0;j<N;j++){
-            matrice_energetica[i][j]=-1;
+        for(int j=0;j<NN;j++){
+            matrice_energetica[i][j]=1;
             //matrice_previsione_energetica [i][j]=-1;
         }
     }
@@ -54,7 +63,7 @@ void inizializzaMatrice(){
 
 void inizializzaMatriceTest(GreenPlantModel model){
     for(int i=0;i<DAYS;i++){
-        for(int j=0;j<N;j++){
+        for(int j=0;j<NN;j++){
             int minuti=i*60+j*FREQUENZA;
             matrice_energetica[i][j]=model.getProducedPowerByTime(minuti);
             //matrice_previsione_energetica [i][j]=-1;
@@ -64,12 +73,12 @@ void inizializzaMatriceTest(GreenPlantModel model){
 
 
 void media(){
-    float somma;
+    double somma;
     int count;
-    for(int i=0;i<N;i++){
+    for(int i=0;i<NN;i++){
         somma=0;
         count=0;
-        for(int j=0;j<DAYS;j++){
+        for(int j=0;j<DAYS-1;j++){
             int tmp=matrice_energetica[j][i];
             if(tmp!=-1){
                 somma+=tmp;
@@ -84,16 +93,18 @@ void media(){
 }
 
 int setEnergia(int n,int e){
-    if(n>N){
+    if(n>NN){
         return -1;
     }
     else 
         matrice_energetica[oggi][n]=e;
+        std::cout << "set energia " << e << "W in slot " << n<< "  oggi " <<std::endl;
+        
     return 0;
 }
 void nuovoGiorno(){
     for(int i=0;i<DAYS-1;i++){
-        for(int j=0;j<N;j++){
+        for(int j=0;j<NN;j++){
             matrice_energetica[i][j]=matrice_energetica[i+1][j];   
         }
     }
@@ -101,64 +112,114 @@ void nuovoGiorno(){
 }
 
 
-float prodottoScalare(float v1[],float v2[]){
-        float somma=0;
-        for(int k=0;k<kappa;k++){
+double prodottoScalare(double v1[],double v2[],int j){
+        double somma=0;
+        for(int k=0;k<j;k++){
             somma+=v1[k]*v2[k];
         }
     return somma;
 }
 
 
-float gapk(int i){
-    float gap=0;
-    if(i<kappa){
-        float v [i];
-        float p [i];
-        float sommatoriaP=0;
+double gapk(int i){
+    double gap=0;
+    // if(i<kappa){
+    //     double v [i];
+    //     double p [i];
+    //     double sommatoriaP=0;
 
-        for(int k=0;k<i;k++){
-            v[k]=(matrice_energetica[oggi][k])/medie_energetiche[k];
-            p[k]=(k+1)/i;
+    //     for(int k=0;k<i;k++){
+    //         if(medie_energetiche[k]==0){
+    //             v[k]=0;
+    //         }else{
+    //             v[k]=(matrice_energetica[oggi][k])/medie_energetiche[k];
+    //         }
+    //         p[k]=static_cast<double>(k+1)/i;
+    //         sommatoriaP+=p[k];
+    //     }
+    //     gap= prodottoScalare(v,p,i)/sommatoriaP;
+    // }
+
+    //else
+    {
+        double v [kappa];
+        double p [kappa];
+        double sommatoriaP=0;
+
+        for(int k=1;k<=kappa;k++){
+            int index=(i-kappa+k)%NN;
+            std::cout<<"indice "<< (i-kappa+k)%NN; 
+
+            if(medie_energetiche[index]==0){
+                v[k]=0;
+                std::cout<<" v "<< k << "= "<<v[k]<< " ,"; 
+
+            }else{
+                v[k]=(matrice_energetica[oggi][index])/medie_energetiche[index];
+                std::cout<<"v "<< k << "= "<<v[k]<< " ,"; 
+            }
+            p[k]=static_cast<float>(k)/kappa;
             sommatoriaP+=p[k];
         }
-        gap= prodottoScalare(v,p)/sommatoriaP;
-    }
-
-    else{
-        float v [kappa];
-        float p [kappa];
-        float sommatoriaP=0;
-
-        for(int k=0;k<kappa;k++){
-            v[k]=(matrice_energetica[oggi][i-kappa+k])/medie_energetiche[i-kappa+k];
-            p[k]=(k+1)/kappa;
-            sommatoriaP+=p[k];
-        }
-        gap= prodottoScalare(v,p)/sommatoriaP;
+        std::cout<<std::endl;
+        gap= prodottoScalare(v,p,kappa)/sommatoriaP;
     }
     return gap;
 }
 
+double recursiveEWMA(float alpha, int index, int giorno) {
+    // Caso base: se l'indice è zero, restituisci il primo valore dei dati
+    if (giorno == 0) {
+        return matrice_energetica[giorno][index];
+    }
+    // Caso ricorsivo: calcola l'EWMA per l'indice corrente
+    return alpha * matrice_energetica[giorno][index] + (1 - alpha) * recursiveEWMA( alpha, index, giorno-1);
+}
 
-
-void previsioneDelGiorno(int c){
-    for(int i = c;i< N;i++){
-        float mediaSlot=medie_energetiche[i];
-        if(i==0){
-            matrice_energetica[oggi][i]= medie_energetiche[i];
+void previsioneDelGiorno(int c,double en){
+    double per=(en-medie_energetiche[c])/medie_energetiche[c];
+    std::cout << "percentuale variabile del "<< per <<"%"<<std::endl;
+    for(int i = 0;i< NN;i++){
+        if(i <c){
+            previsioni[i]=0;
         }
-        matrice_energetica[oggi][i]= alfa * matrice_energetica[oggi][i-1] * (1-alfa)*gapk(i+1)* medie_energetiche[i];
+        else{
+            if(medie_energetiche[c]==0.0){
+                previsioni[i]=0.0;
+            }
+            else{
+                // double mediaSlot=medie_energetiche[i];
+                double prev = recursiveEWMA(alfa,i,oggi-1);
+                std::cout<< "slot "<< i << " "<< prev << " varia di "<< per*prev <<""<<std::endl;
+                
+
+                previsioni[i] = prev+ prev*per;
+                // std::cout << "revisione "<< i <<" = "<< matrice_energetica[oggi][i] <<std::endl;}
+            }
+        }
     }
 }
 
+
+
 void printMatriceEnergetica(){
     for (int i = 0; i < DAYS; ++i) {
-        for (int j = 0; j < N; ++j) {
+        for (int j = 0; j < NN; ++j) {
             std::cout << matrice_energetica[i][j] << " ";
+            // if(matrice_energetica[i][j]==1){
+            // std::cout << " i valori di i e j sono" << i<< " "<< j <<std::endl;
+
+            // }
         }
         std::cout << std::endl;
     }
+}
+
+void printPrevisioni(){
+    for (int i = 0; i < NN; ++i) {
+            std::cout << previsioni[i] << "W, ";
+    }
+    std::cout<<std::endl;
 }
 
 

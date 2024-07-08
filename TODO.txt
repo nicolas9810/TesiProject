@@ -8,3 +8,6 @@
 
 3.
     mi serve avere un modello dei consumi della fpga
+
+4.
+  implementare la previsione nel modello virtuale. Cioè fare previsione utilizzando i consumi virtuali.

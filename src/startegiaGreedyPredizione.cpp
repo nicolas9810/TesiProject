@@ -6,6 +6,7 @@
 #include <thread>
 #include <chrono>
 
+
 using namespace std;
 
 class CodaCircolare{
@@ -58,9 +59,10 @@ class CodaCircolare{
 };
 
 StrategiaGreedyPredizione::StrategiaGreedyPredizione(): Strategia::Strategia(nullptr){}
-StrategiaGreedyPredizione::StrategiaGreedyPredizione(epever *dev): Strategia::Strategia(dev){
+StrategiaGreedyPredizione::StrategiaGreedyPredizione(epever *dev,Tempo *t): Strategia::Strategia(dev){
     attivo=true;
-    std::thread previsioni([this]{gestionePrevisioni();});
+    tempo=t;
+    //std::thread previsioni([this]{gestionePrevisioni();});
 }
 StrategiaGreedyPredizione& StrategiaGreedyPredizione::operator=(const StrategiaGreedyPredizione& other){
      if (this != &other) {
@@ -74,8 +76,9 @@ StrategiaGreedyPredizione& StrategiaGreedyPredizione::operator=(const StrategiaG
 }
 
 int StrategiaGreedyPredizione::strategia(float batteryCharge){
-    // float batteryCharge=getBatteryCharge();
-    float previsioneEnergia = previsioneEnergiaDisponibile(PREDWINDOW);
+    // float batteryCharge=getBatteryCharge()
+    int min=tempo->getTimeInMin();
+    float previsioneEnergia = previsioneEnergiaDisponibile(PREDWINDOW,min);
     if(batteryCharge <30){
         return OFF;
     }
@@ -125,6 +128,8 @@ void StrategiaGreedyPredizione::gestionePrevisioni(){
     CodaCircolare codaMisurazioni=CodaCircolare(5);
     inizializzaMatrice();
     int ultimoSlot=0;
+    bool flag;
+    int giorno;
     while(true){
  
         /* 
@@ -144,7 +149,9 @@ void StrategiaGreedyPredizione::gestionePrevisioni(){
             cout<<"È iniziato un nuovo giorno, calcolo le nuove previsioni"<<endl;
             #endif
            nuovoGiorno();
-           previsioneDelGiorno(0);
+           flag=false;
+           giorno=tempo->getDay();
+        //    previsioneDelGiorno(0);
            giornoNuovo=false;
         }
         /*
@@ -159,26 +166,24 @@ void StrategiaGreedyPredizione::gestionePrevisioni(){
                 cout<<"Misura potenza in ingresso: "<<potenzaInIngresso<<endl;
                 #endif
                 codaMisurazioni.addElement(potenzaInIngresso);
-                this_thread::sleep_for(chrono::minutes(FREQUENZA/10));
+                this_thread::sleep_for(chrono::seconds(FREQUENZA/10));
+                //this_thread::sleep_for(chrono::minutes(FREQUENZA/10));
             }
             float mediaMisurazioni=codaMisurazioni.getMedia();
-            ultimoSlot=setEnergia(mediaMisurazioni);
-            #ifdef DEBUG_MODE
+            int min = tempo->getTimeInMin();
+            ultimoSlot=setEnergia(mediaMisurazioni,min);
+            // #ifdef DEBUG_MODE
+            // cout<<"slot del giorno: "<<ultimoSlot<<" = "<<media<<endl;
+            // #endif
+
+           #ifdef DEBUG_MODE
             cout<<"slot del giorno: "<<ultimoSlot<<" = "<<media<<endl;
             #endif
-
-            if(ultimoSlot==N/2 && !giornoUno){
-                previsioneDelGiorno(ultimoSlot);
-                #ifdef DEBUG_MODE
-                cout<<"È mezzogiorno, riaggiorno le previsioni"<<endl;
-                #endif
-            }
-            if(ultimoSlot>=N-1){
-                #ifdef DEBUG_MODE
-                cout<<"È l'ultimo slot del giorno, pronto a passare al prossimogiorno"<<endl;
-                #endif
-               giornoNuovo=true;
-               if(giornoUno)giornoUno=false;
+            if(mediaMisurazioni && !flag){
+                flag = true;
+                int slot=(min*60)/60;
+                previsioneDelGiorno(slot,mediaMisurazioni);
+                printPrevisioni();
             }
             
         }
@@ -196,4 +201,13 @@ void StrategiaGreedyPredizione::attiva(){
 void StrategiaGreedyPredizione::disattiva(){
         lock_guard<std::mutex> lock(mtx);
         attivo = false;
+}
+
+int StrategiaGreedyPredizione::getTimeInMin(){
+    time_t now = time(0); // get current date and time  
+    tm* ltm = localtime(&now);  
+    int hour= ltm->tm_hour;
+    int min= ltm->tm_min;
+    min=min+hour*60;
+    return min;
 }

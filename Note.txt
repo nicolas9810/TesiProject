@@ -1,0 +1,14 @@
+1) per eseguire solo il modello del pannello solare:
+        ./GreenPlantModel  
+
+    per compilarre:
+         g++ -o GreenPlantModel ./src/mainPlantModel.cpp ./src/GreenPlantModel.cpp -Iinclude/
+
+2) per compilare il sobelfilter.cpp
+
+    g++ -o testSobel testSobel.cpp `pkg-config --cflags --libs opencv4`
+3)
+    g++ prova.cpp -o prova -lboost_system -lboost_filesystem -lpthread
+
+4) idea per eseguire la funzione di host
+    inserire un lock e chiamare il binario direttamente in loop.

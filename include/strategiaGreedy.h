@@ -1,3 +1,6 @@
+#ifndef STRATEGIAGREEDY_H
+#define STRATEGIAGREEDY_H
+
 #include "strategia.h"
 #include "defines.h"
 using namespace std;
@@ -11,3 +14,4 @@ public:
     virtual int strategia(float batteryCharge);
 
 };
+#endif //STRATEGIAGREEDY_H
