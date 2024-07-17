@@ -4,9 +4,6 @@
 CMakeFiles/gestioneEnergetica.dir/src/GreenPlantModel.cpp.o
  ../include/GreenPlantModel.h
  /home/nicolas/Codice/TesiProject/src/GreenPlantModel.cpp
-CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.o
- ../include/commonFunc.h
- /home/nicolas/Codice/TesiProject/src/commonFunc.cpp
 CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o
  ../include/chargeController.h
  ../include/epever.h
@@ -20,6 +17,7 @@ CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o
  ../include/chargeController.h
  ../include/defines.h
  ../include/epever.h
+ ../include/previsione.h
  ../include/strategia.h
  ../include/strategiaGreedy.h
  ../include/strategiaGreedyPredizione.h
@@ -35,6 +33,7 @@ CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.o
  ../include/GreenPlantModel.h
  ../include/defines.h
  ../include/previsione.h
+ ../include/tempo.h
  /home/nicolas/Codice/TesiProject/src/previsione.cpp
 CMakeFiles/gestioneEnergetica.dir/src/profpgarun.cpp.o
  /home/nicolas/Codice/TesiProject/src/profpgarun.cpp

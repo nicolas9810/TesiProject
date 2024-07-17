@@ -74,12 +74,12 @@ clean: CMakeFiles/gestioneEnergetica.dir/clean
 CMakeFiles/gestioneEnergetica.dir/all:
 	$(MAKE) -f CMakeFiles/gestioneEnergetica.dir/build.make CMakeFiles/gestioneEnergetica.dir/depend
 	$(MAKE) -f CMakeFiles/gestioneEnergetica.dir/build.make CMakeFiles/gestioneEnergetica.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13 "Built target gestioneEnergetica"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12 "Built target gestioneEnergetica"
 .PHONY : CMakeFiles/gestioneEnergetica.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/gestioneEnergetica.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/nicolas/Codice/TesiProject/build/CMakeFiles 13
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/nicolas/Codice/TesiProject/build/CMakeFiles 12
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/gestioneEnergetica.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/nicolas/Codice/TesiProject/build/CMakeFiles 0
 .PHONY : CMakeFiles/gestioneEnergetica.dir/rule

@@ -4,9 +4,6 @@
 CMakeFiles/gestioneEnergetica.dir/src/GreenPlantModel.cpp.o: ../include/GreenPlantModel.h
 CMakeFiles/gestioneEnergetica.dir/src/GreenPlantModel.cpp.o: ../src/GreenPlantModel.cpp
 
-CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.o: ../include/commonFunc.h
-CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.o: ../src/commonFunc.cpp
-
 CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o: ../include/chargeController.h
 CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o: ../include/epever.h
 CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o: ../src/epever.cpp
@@ -19,6 +16,7 @@ CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: ../include/Green
 CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: ../include/chargeController.h
 CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: ../include/defines.h
 CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: ../include/epever.h
+CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: ../include/previsione.h
 CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: ../include/strategia.h
 CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: ../include/strategiaGreedy.h
 CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: ../include/strategiaGreedyPredizione.h
@@ -34,6 +32,7 @@ CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: /usr/local/inclu
 CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.o: ../include/GreenPlantModel.h
 CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.o: ../include/defines.h
 CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.o: ../include/previsione.h
+CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.o: ../include/tempo.h
 CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.o: ../src/previsione.cpp
 
 CMakeFiles/gestioneEnergetica.dir/src/profpgarun.cpp.o: ../src/profpgarun.cpp

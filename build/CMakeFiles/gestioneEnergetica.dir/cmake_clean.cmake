@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/gestioneEnergetica.dir/src/GreenPlantModel.cpp.o"
-  "CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.o"
   "CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o"
   "CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o"
   "CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.o"

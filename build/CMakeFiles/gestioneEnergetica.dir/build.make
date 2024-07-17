@@ -70,22 +70,9 @@ CMakeFiles/gestioneEnergetica.dir/src/GreenPlantModel.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gestioneEnergetica.dir/src/GreenPlantModel.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nicolas/Codice/TesiProject/src/GreenPlantModel.cpp -o CMakeFiles/gestioneEnergetica.dir/src/GreenPlantModel.cpp.s
 
-CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.o: CMakeFiles/gestioneEnergetica.dir/flags.make
-CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.o: ../src/commonFunc.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.o -c /home/nicolas/Codice/TesiProject/src/commonFunc.cpp
-
-CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nicolas/Codice/TesiProject/src/commonFunc.cpp > CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.i
-
-CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nicolas/Codice/TesiProject/src/commonFunc.cpp -o CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.s
-
 CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o: CMakeFiles/gestioneEnergetica.dir/flags.make
 CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o: ../src/epever.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o -c /home/nicolas/Codice/TesiProject/src/epever.cpp
 
 CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.i: cmake_force
@@ -98,7 +85,7 @@ CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.s: cmake_force
 
 CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: CMakeFiles/gestioneEnergetica.dir/flags.make
 CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: ../src/gestioneEnergetica.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o -c /home/nicolas/Codice/TesiProject/src/gestioneEnergetica.cpp
 
 CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.i: cmake_force
@@ -111,7 +98,7 @@ CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.s: cmake_force
 
 CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.o: CMakeFiles/gestioneEnergetica.dir/flags.make
 CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.o: ../src/previsione.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.o -c /home/nicolas/Codice/TesiProject/src/previsione.cpp
 
 CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.i: cmake_force
@@ -124,7 +111,7 @@ CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.s: cmake_force
 
 CMakeFiles/gestioneEnergetica.dir/src/profpgarun.cpp.o: CMakeFiles/gestioneEnergetica.dir/flags.make
 CMakeFiles/gestioneEnergetica.dir/src/profpgarun.cpp.o: ../src/profpgarun.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/profpgarun.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/profpgarun.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gestioneEnergetica.dir/src/profpgarun.cpp.o -c /home/nicolas/Codice/TesiProject/src/profpgarun.cpp
 
 CMakeFiles/gestioneEnergetica.dir/src/profpgarun.cpp.i: cmake_force
@@ -137,7 +124,7 @@ CMakeFiles/gestioneEnergetica.dir/src/profpgarun.cpp.s: cmake_force
 
 CMakeFiles/gestioneEnergetica.dir/src/startegiaGreedyPredizione.cpp.o: CMakeFiles/gestioneEnergetica.dir/flags.make
 CMakeFiles/gestioneEnergetica.dir/src/startegiaGreedyPredizione.cpp.o: ../src/startegiaGreedyPredizione.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/startegiaGreedyPredizione.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/startegiaGreedyPredizione.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gestioneEnergetica.dir/src/startegiaGreedyPredizione.cpp.o -c /home/nicolas/Codice/TesiProject/src/startegiaGreedyPredizione.cpp
 
 CMakeFiles/gestioneEnergetica.dir/src/startegiaGreedyPredizione.cpp.i: cmake_force
@@ -150,7 +137,7 @@ CMakeFiles/gestioneEnergetica.dir/src/startegiaGreedyPredizione.cpp.s: cmake_for
 
 CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.o: CMakeFiles/gestioneEnergetica.dir/flags.make
 CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.o: ../src/strategia.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.o -c /home/nicolas/Codice/TesiProject/src/strategia.cpp
 
 CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.i: cmake_force
@@ -163,7 +150,7 @@ CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.s: cmake_force
 
 CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.o: CMakeFiles/gestioneEnergetica.dir/flags.make
 CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.o: ../src/strategiaGreedy.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.o -c /home/nicolas/Codice/TesiProject/src/strategiaGreedy.cpp
 
 CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.i: cmake_force
@@ -176,7 +163,7 @@ CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.s: cmake_force
 
 CMakeFiles/gestioneEnergetica.dir/src/strategiaVirtuale.cpp.o: CMakeFiles/gestioneEnergetica.dir/flags.make
 CMakeFiles/gestioneEnergetica.dir/src/strategiaVirtuale.cpp.o: ../src/strategiaVirtuale.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/strategiaVirtuale.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/strategiaVirtuale.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gestioneEnergetica.dir/src/strategiaVirtuale.cpp.o -c /home/nicolas/Codice/TesiProject/src/strategiaVirtuale.cpp
 
 CMakeFiles/gestioneEnergetica.dir/src/strategiaVirtuale.cpp.i: cmake_force
@@ -189,7 +176,7 @@ CMakeFiles/gestioneEnergetica.dir/src/strategiaVirtuale.cpp.s: cmake_force
 
 CMakeFiles/gestioneEnergetica.dir/src/strategiaVirtualePredizione.cpp.o: CMakeFiles/gestioneEnergetica.dir/flags.make
 CMakeFiles/gestioneEnergetica.dir/src/strategiaVirtualePredizione.cpp.o: ../src/strategiaVirtualePredizione.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/strategiaVirtualePredizione.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/strategiaVirtualePredizione.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gestioneEnergetica.dir/src/strategiaVirtualePredizione.cpp.o -c /home/nicolas/Codice/TesiProject/src/strategiaVirtualePredizione.cpp
 
 CMakeFiles/gestioneEnergetica.dir/src/strategiaVirtualePredizione.cpp.i: cmake_force
@@ -202,7 +189,7 @@ CMakeFiles/gestioneEnergetica.dir/src/strategiaVirtualePredizione.cpp.s: cmake_f
 
 CMakeFiles/gestioneEnergetica.dir/src/tempo.cpp.o: CMakeFiles/gestioneEnergetica.dir/flags.make
 CMakeFiles/gestioneEnergetica.dir/src/tempo.cpp.o: ../src/tempo.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/tempo.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/gestioneEnergetica.dir/src/tempo.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/gestioneEnergetica.dir/src/tempo.cpp.o -c /home/nicolas/Codice/TesiProject/src/tempo.cpp
 
 CMakeFiles/gestioneEnergetica.dir/src/tempo.cpp.i: cmake_force
@@ -216,7 +203,6 @@ CMakeFiles/gestioneEnergetica.dir/src/tempo.cpp.s: cmake_force
 # Object files for target gestioneEnergetica
 gestioneEnergetica_OBJECTS = \
 "CMakeFiles/gestioneEnergetica.dir/src/GreenPlantModel.cpp.o" \
-"CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.o" \
 "CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o" \
 "CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o" \
 "CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.o" \
@@ -232,7 +218,6 @@ gestioneEnergetica_OBJECTS = \
 gestioneEnergetica_EXTERNAL_OBJECTS =
 
 gestioneEnergetica: CMakeFiles/gestioneEnergetica.dir/src/GreenPlantModel.cpp.o
-gestioneEnergetica: CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.o
 gestioneEnergetica: CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o
 gestioneEnergetica: CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o
 gestioneEnergetica: CMakeFiles/gestioneEnergetica.dir/src/previsione.cpp.o
@@ -247,7 +232,7 @@ gestioneEnergetica: CMakeFiles/gestioneEnergetica.dir/build.make
 gestioneEnergetica: /usr/lib/x86_64-linux-gnu/libboost_system.so.1.71.0
 gestioneEnergetica: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.71.0
 gestioneEnergetica: CMakeFiles/gestioneEnergetica.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX executable gestioneEnergetica"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/nicolas/Codice/TesiProject/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable gestioneEnergetica"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/gestioneEnergetica.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -39,6 +39,8 @@ chargeController.h
 ../include/previsione.h
 GreenPlantModel.h
 ../include/GreenPlantModel.h
+tempo.h
+../include/tempo.h
 
 ../include/strategia.h
 epever.h
@@ -64,6 +66,10 @@ defines.h
 chrono
 -
 mutex
+-
+shared_mutex
+-
+iostream
 -
 
 /home/nicolas/Codice/TesiProject/src/strategiaVirtualePredizione.cpp

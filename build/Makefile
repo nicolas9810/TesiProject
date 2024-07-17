@@ -150,33 +150,6 @@ src/GreenPlantModel.cpp.s:
 	$(MAKE) -f CMakeFiles/gestioneEnergetica.dir/build.make CMakeFiles/gestioneEnergetica.dir/src/GreenPlantModel.cpp.s
 .PHONY : src/GreenPlantModel.cpp.s
 
-src/commonFunc.o: src/commonFunc.cpp.o
-
-.PHONY : src/commonFunc.o
-
-# target to build an object file
-src/commonFunc.cpp.o:
-	$(MAKE) -f CMakeFiles/gestioneEnergetica.dir/build.make CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.o
-.PHONY : src/commonFunc.cpp.o
-
-src/commonFunc.i: src/commonFunc.cpp.i
-
-.PHONY : src/commonFunc.i
-
-# target to preprocess a source file
-src/commonFunc.cpp.i:
-	$(MAKE) -f CMakeFiles/gestioneEnergetica.dir/build.make CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.i
-.PHONY : src/commonFunc.cpp.i
-
-src/commonFunc.s: src/commonFunc.cpp.s
-
-.PHONY : src/commonFunc.s
-
-# target to generate assembly for a file
-src/commonFunc.cpp.s:
-	$(MAKE) -f CMakeFiles/gestioneEnergetica.dir/build.make CMakeFiles/gestioneEnergetica.dir/src/commonFunc.cpp.s
-.PHONY : src/commonFunc.cpp.s
-
 src/epever.o: src/epever.cpp.o
 
 .PHONY : src/epever.o
@@ -459,9 +432,6 @@ help:
 	@echo "... src/GreenPlantModel.o"
 	@echo "... src/GreenPlantModel.i"
 	@echo "... src/GreenPlantModel.s"
-	@echo "... src/commonFunc.o"
-	@echo "... src/commonFunc.i"
-	@echo "... src/commonFunc.s"
 	@echo "... src/epever.o"
 	@echo "... src/epever.i"
 	@echo "... src/epever.s"
