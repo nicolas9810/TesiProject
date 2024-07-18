@@ -15,7 +15,12 @@
 #include "tempo.h"
 #include <boost/process.hpp>
 #include <pthread.h>
+#include "previsione.h"
+/*
+TODO 
+Provare a inserire la strategia direttamente qui per vedere se riesco a prendere il tempo
 
+*/
 
 namespace bp = boost::process;
 
@@ -108,7 +113,7 @@ void inizializzazione(){
     }
     // pthread_setname_np(pthread_self(), "Main Thread");
     //creazione della strategia
-    tim=new Tempo();
+    tim=new Tempo(0,0,0,0);
     //tempo=Tempo();
     straGreedy=StrategiaGreedy(device);
     straGreedyPredizione=StrategiaGreedyPredizione(device,tim);
@@ -135,65 +140,87 @@ float getBatteryCharge(){
 float misuraPotenza(){
     return device->getArrayPower();
 }
+int strategia(int batteryCharge){
+    float previsioneEnergia = previsioneEnergiaDisponibile(PREDWINDOW,min);
+    if(batteryCharge <30){
+        return OFF;
+    }
+    else if(batteryCharge>= 30 && batteryCharge <50){
+        int flag = getBestConfig(previsioneEnergia);
+        if(flag==-1){
+            return MINPOWER;
+        }
+        else{
+            return flag;
+        }
 
-
+    }
+    else if(batteryCharge>= 50 && batteryCharge<70){
+        int flag = getBestConfig(previsioneEnergia);
+        if(flag==-1){
+            return MEDPOWER;
+        }
+        else{
+            return flag;
+        }
+    }
+    else{
+        return MAXPOWER;
+    }
+}
 void gestioneStrategia(){
-    pthread_setname_np(pthread_self(),"Strategia");
     #ifdef DEBUG_MODE
     cout<<"[T GESTIONE ENERGETICA - gestioneEner] inzio a monitorare l'energia"<<endl;
     #endif    
     int configurazione;
     float batteryStatus;
-    
+
+    batteryStatus = getBatteryCharge();
+    #ifdef DEBUG_MODE
+    cout<<"[T GESTIONE ENERGETICA - gestioneEner] Batteria al: "<<batteryStatus<<"\%"<<endl;
+    #endif
+    //currentStrategy->setConsumi(configurazione);
+    configurazione=currentStrategy->strategia(batteryStatus,configurazione);
+    if (configurazione!=configurazioneAttuale){   
+        #ifdef DEBUG_MODE
+        cout<<"Nuova configurazione scelta, attuale= "<<configurazioneAttuale<<", nuova= "<<configurazione<<endl;
+        #endif
+        unique_lock<std::mutex> lck1(mutexFlag);
+        unique_lock<std::mutex> lck2(mutexInter);
+        #ifdef DEBUG_MODE
+        cout<<"[ T GESTIONE ENERGETICA - gestioneEner] modifico l'array di interrupt"<<endl;
+        #endif
+        interrupt[INTCONFIG]=configurazione;
+        flagInterrupt=true;
+        cv.notify_all();            
+        
+    }  
+    else{
+        #ifdef DEBUG_MODE
+        cout<<"[ MAIN - GESTIONE STRATEGIA ]configurazione è adatta = "<<configurazioneAttuale<<endl;
+        #endif
+    }
+    for(int i=0;i<3;i++){
         batteryStatus = getBatteryCharge();
         #ifdef DEBUG_MODE
-        cout<<"[T GESTIONE ENERGETICA - gestioneEner] Batteria al: "<<batteryStatus<<"\%"<<endl;
+        //cout<<"[T GESTIONE ENERGETICA - gestioneEner] + Batteria al: "<<batteryStatus<<"\%"<<endl;
         #endif
-        //currentStrategy->setConsumi(configurazione);
-        configurazione=currentStrategy->strategia(batteryStatus);
-        if (configurazione!=configurazioneAttuale){   
-            #ifdef DEBUG_MODE
-            cout<<"Nuova configurazione scelta, attuale= "<<configurazioneAttuale<<", nuova= "<<configurazione<<endl;
-            #endif
+        if(batteryStatus<30){
             unique_lock<std::mutex> lck1(mutexFlag);
             unique_lock<std::mutex> lck2(mutexInter);
-            #ifdef DEBUG_MODE
-            cout<<"[ T GESTIONE ENERGETICA - gestioneEner] modifico l'array di interrupt"<<endl;
-            #endif
-            interrupt[INTCONFIG]=configurazione;
-            flagInterrupt=true;
+            interrupt[INTSPEGNI]=configurazione;
+            flagInterrupt = true;
             cv.notify_all();            
-           
-        }  
-        else{
-            #ifdef DEBUG_MODE
-            cout<<"[ MAIN - GESTIONE STRATEGIA ]configurazione è adatta = "<<configurazioneAttuale<<endl;
-            #endif
         }
-        for(int i=0;i<3;i++){
-            batteryStatus = getBatteryCharge();
-            #ifdef DEBUG_MODE
-            cout<<"[T GESTIONE ENERGETICA - gestioneEner] + Batteria al: "<<batteryStatus<<"\%"<<endl;
-            #endif
-            if(batteryStatus<30){
-                unique_lock<std::mutex> lck1(mutexFlag);
-                unique_lock<std::mutex> lck2(mutexInter);
-                interrupt[INTSPEGNI]=configurazione;
-                flagInterrupt = true;
-                cv.notify_all();            
-            }
-            #ifdef VIRTUALE
-            this_thread::sleep_for(chrono::seconds(2));
-            #endif
-
-
-            #ifndef VIRTUALE
-            this_thread::sleep_for(chrono::minutes(FREQUENZA*2));
-
-            #endif
-        
+    #ifdef VIRTUALE
+    this_thread::sleep_for(chrono::seconds(2));
+    #endif
+    #ifndef VIRTUALE
+    this_thread::sleep_for(chrono::minutes(FREQUENZA*2));
+    #endif      
     }
-   }
+  
+}
 
 // void gestionePrevisioni(){
 //     CodaCircolare codaMisurazioni=CodaCircolare(5);
@@ -247,13 +274,13 @@ void gestioneStrategia(){
 //     }    
 // }
 
-void gestioneHost(){
-    return;
+void* gestioneHost(void* args){
+    return nullptr;
 }
-
 //gestione Tempo
-void gestioneTempo(){
+void* gestioneTempo(void* args){
     pthread_setname_np(pthread_self(), "Gestione Tempo");
+    while(true){
     tim->incrementsMinutes(45);
     //tempo.incrementa(40);
     #ifdef VIRTUALE
@@ -261,6 +288,8 @@ void gestioneTempo(){
     #endif
     this_thread::sleep_for(chrono::seconds(2));
     //sleep(10);
+    }
+    return nullptr
 }
 
 /* +++++++++++++++++++++ ROUTINE ++++++++++++++++++++++++++++++++*/
@@ -389,6 +418,11 @@ void runFpga(){
 }
 
 int main(){
+
+    pthread_t normalThread1;
+    pthread_t normalThread2;
+
+
     
     int c =0;
     
@@ -404,14 +438,21 @@ int main(){
     //creazione della strategia
     
     inizializzazione();
+    int result = pthread_create(&normalThread1, nullptr, gestioneTempo, nullptr);
+    if (result != 0) {
+        std::cerr << "Errore nella creazione del thread a priorità normale" << std::endl;
+        return 1;
+    }
+    result = pthread_create(&normalThread1, nullptr, gestioneHost, nullptr);
+    if (result != 0) {
+        std::cerr << "Errore nella creazione del thread a priorità normale" << std::endl;
+        return 1;
+    }
 
     while(c<100){
         
         //runFpga();
-        #ifdef VIRTUALE
-        cout<<"[MAIN] gestione di un tempo virtuale"<<endl;
-        gestioneTempo();
-        #endif
+       
 
         #ifdef VIRTUALE
         cout<<"[MAIN] creo thread che gestisce la strategia"<<endl;
@@ -421,10 +462,8 @@ int main(){
         #ifdef DEBUG_MODE
         cout<<"[MAIN] creo thread che gestisce l'host"<<endl;
         #endif
-
+        gestionePrevisioni();
         // //2. thread che gestice la comunicazione con l'host
-        gestioneHost();
-
         // exitcode = system(comand.c_str());
         #ifdef DEBUG_MODE
         cout<<"[MAIN] thread controlla gli interrupt"<<endl;

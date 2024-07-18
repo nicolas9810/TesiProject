@@ -14,7 +14,7 @@ using namespace std;
 
 StrategiaGreedy::StrategiaGreedy(epever *dev): Strategia::Strategia(dev){}
 StrategiaGreedy::StrategiaGreedy():Strategia::Strategia(nullptr){}
-int StrategiaGreedy::strategia(float batteryCharge){
+int StrategiaGreedy::strategia(float batteryCharge,int conf){
     bool inCharge=Strategia::getBatteryStatus();
     // int batteryCharge=Strategia::getBatteryCharge();
     if(batteryCharge <30){
@@ -72,4 +72,7 @@ int StrategiaGreedy::strategia(float batteryCharge){
         #endif
         return MAXPOWER;
     }
+}
+void StrategiaGreedy::gestionePrevisioni(){
+    return;
 }

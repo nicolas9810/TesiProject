@@ -1,6 +1,7 @@
 #include <iostream>
 #include "defines.h"
 #include "strategia.h"
+
 using namespace std;
 Strategia::Strategia(epever* d){
     device=d;
@@ -17,10 +18,18 @@ bool Strategia::getBatteryStatus(){
 
 void Strategia::setConsumi(int c){
 
-    arrayConsumi[c].consumo=getDevice()->getOutputPower();
+    arrayConsumi[c].consumo=getDevice()->getOutputPower(c);
 
 }
 
 epever* Strategia::getDevice(){
     return device;
 }
+
+void Strategia::setTempo(Tempo *t){
+    tempo=t;
+}
+
+Tempo* Strategia::getTempo(){
+    return tempo;
+} 

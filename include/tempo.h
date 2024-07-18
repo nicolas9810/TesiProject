@@ -3,8 +3,20 @@
 #include "defines.h"
 #include <chrono>
 #include <mutex>
+#include <shared_mutex>
+#include <iostream>
+
+
+
 class Tempo {
 private:
+
+    std::mutex mutex_;
+    std::condition_variable read_cv_;
+    std::condition_variable write_cv_;
+    int reader_count_ = 0;
+    int writer_count_ = 0;
+    bool writing_ = false;
 
 
 
@@ -14,6 +26,8 @@ public:
     int hour;
     int day;
     
+    
+
     // Costruttori
     Tempo();
     Tempo(int d, int h, int m, int s);
@@ -38,6 +52,10 @@ public:
     // Setter
     void settime(int d, int h, int m, int s);
 
+    void lock_read();
+    void unlock_read();
+    void lock_write();
+    void unlock_write();
 };
 
 #endif // VIRTUALTIME_H

@@ -19,12 +19,12 @@ StrategiaVirtuale::StrategiaVirtuale(epever *dev, Tempo *t):Strategia::Strategia
     //std::thread scorreredeltempo(&StrategiaVirtuale::gestioneTempo,this);
 }*/
 
-int StrategiaVirtuale::strategia(float batteryCharge){
+int StrategiaVirtuale::strategia(float batteryCharge,int conf){
     
     #ifdef VIRTUALE
     cout<<"[T STRATEGIA- straVirtuale] calcolo strategia "<<endl;
     #endif
-    float outputPower = device->getOutputPower();
+    float outputPower = device->getOutputPower(conf);
     #ifdef VIRTUALE
     cout<<"[T STRATEGIA- straVirtuale] potenza in uscita: "<< outputPower<<endl;
     #endif
@@ -44,5 +44,8 @@ int StrategiaVirtuale::strategia(float batteryCharge){
         #endif
         return MAXPOWER;
         }
+}
+void StrategiaVirtuale::gestionePrevisioni(){
+    return;
 }
 

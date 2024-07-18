@@ -16,9 +16,12 @@ public:
     StrategiaVirtuale(epever *dev,Tempo *t);
 
     StrategiaVirtuale();
-    virtual int strategia(float batteryCharge);
+    virtual int strategia(float batteryCharge,int conf);
+    virtual void gestionePrevisioni();
+
     GreenPlantModel *modelloPannello;
     void gestioneTempo();
+
     Tempo *tempo;
     Tempo *time;
 

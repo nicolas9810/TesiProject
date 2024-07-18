@@ -62,7 +62,7 @@ StrategiaGreedyPredizione::StrategiaGreedyPredizione(): Strategia::Strategia(nul
 StrategiaGreedyPredizione::StrategiaGreedyPredizione(epever *dev,Tempo *t): Strategia::Strategia(dev){
     attivo=true;
     tempo=t;
-    //std::thread previsioni([this]{gestionePrevisioni();});
+    std::thread previsioni([this]{gestionePrevisioni();});
 }
 StrategiaGreedyPredizione& StrategiaGreedyPredizione::operator=(const StrategiaGreedyPredizione& other){
      if (this != &other) {
@@ -75,7 +75,7 @@ StrategiaGreedyPredizione& StrategiaGreedyPredizione::operator=(const StrategiaG
     return *this;
 }
 
-int StrategiaGreedyPredizione::strategia(float batteryCharge){
+int StrategiaGreedyPredizione::strategia(float batteryCharge,int conf){
     // float batteryCharge=getBatteryCharge()
     int min=tempo->getTimeInMin();
     float previsioneEnergia = previsioneEnergiaDisponibile(PREDWINDOW,min);

@@ -2,6 +2,10 @@
 #include "defines.h"
 #include <iostream>
 #include "previsione.h"
+#include <thread>
+#include <chrono>
+
+
 
 
 // idealmente sono da aggiustare dinamenicamente
@@ -25,11 +29,12 @@ double previsioneEnergiaDisponibile(int n,int min){
     int slot=min/FREQUENZA;
     double result;
     int c=0;
-    for(int i=slot;i<slot+n && i<NN;i++){
+    /*for(int i=slot;i<slot+n && i<NN;i++){
         c++;
         result+=matrice_energetica[DAYS][i];
     } 
-    return result/c;
+    return result/c;*/
+    return matrice_energetica[DAYS][(slot+1)%24];
 }
 
 
@@ -220,6 +225,59 @@ void printPrevisioni(){
             std::cout << previsioni[i] << "W, ";
     }
     std::cout<<std::endl;
+}
+
+void gestionePrevisioniVirtuale(Tempo *tempo, GreenPlantModel *modello){
+    int giorno=-1;
+    bool flag = false;
+
+    //inizializzaMatrice();
+    for(int i=0;i<DAYS;i++){
+         int temp=i*24*60;
+        for(int j=0;j<NN;j++){
+            temp+=60;
+            //tempo->incrementsMinutes(60);
+            setEner(i,j,modello->getProducedPowerByTime(temp));
+        }
+    }
+    while (true)
+    {
+        if(tempo->getDay()!=giorno){
+            std::cout << "Nuovo giorno è il giorno" << tempo->getDay() <<std::endl;
+            nuovoGiorno();
+            flag=false;
+            printMatriceEnergetica();
+            std::cout << "calcolo le previsioni del giorno "<<tempo->getDay()<<std::endl;
+            //previsioneDelGiorno(0);
+            giorno=tempo->getDay();
+            //tempo->incrementsMinutes(60);
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+
+        }else{
+            int min=tempo->getTimeInMin();
+            int minDelGiorno=tempo->getMinutes();
+            int oraDelGiorno=tempo->getHours();
+            double misurazioni=modello->getProducedPowerByTime(min);
+            std::cout << "Produced power at time " << min << " : " << misurazioni <<std::endl;
+            setEnergia(misurazioni,tempo->getMinutes()+tempo->getHours()*60);
+            if(misurazioni>0 && !flag){
+                flag = true;
+                
+                int slot=(minDelGiorno+oraDelGiorno*60)/FREQUENZA;
+                //previsioneDelGiorno(slot-1,misurazioni);
+                printPrevisioni();
+            }
+            //tempo->incrementsMinutes(60);
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+            if(misurazioni>0 && !flag){
+                flag = true;
+                int slot=(minDelGiorno+oraDelGiorno*60)/FREQUENZA;
+                previsioneDelGiorno(slot,misurazioni);
+            }
+        }
+        
+    }
+    
 }
 
 

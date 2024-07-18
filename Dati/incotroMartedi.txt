@@ -1,0 +1,17 @@
+1)MAX FRAME RATE AL VARIARE DELLE FPGA
+Quello che è dispendioso è la lettura delle immagini
+    1FPGA 25 immagini
+    00:02:18            ~ 09:08 100 immagini    60 immagini 2:17 min -> senza lettura 1:26
+
+
+    2FPGA 50 immagini
+    00:04:24           ~ 08:48 100 immagini   60 immagini  2.07 min -> senza lettura  1.14
+
+    3FPGA 75 immagini
+    00:06:00          ~  8 min 100 immagini   60 immagini 1.56  -> senza lettura -> 1:11 
+
+3) i valori li hai gia calcolati in tabelle_consumi.ods, fare altri test per sicurezza
+
+
+
+5) vedere file giornartesignificative.txt

@@ -11,7 +11,8 @@ private:
 public:
     StrategiaGreedy(epever *dev);
     StrategiaGreedy();
-    virtual int strategia(float batteryCharge);
+    virtual int strategia(float batteryCharge,int conf);
+    virtual void gestionePrevisioni();
 
 };
 #endif //STRATEGIAGREEDY_H

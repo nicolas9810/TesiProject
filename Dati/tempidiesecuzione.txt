@@ -1,0 +1,9 @@
+1FPGA 25 immagini
+  00:02:18
+
+
+2FPGA 50 immagini
+00:04:24
+
+3FPGA 75 immagini
+00:06:00

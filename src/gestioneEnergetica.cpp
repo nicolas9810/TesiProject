@@ -1,6 +1,6 @@
 #include "strategia.h"
 #include "strategiaGreedy.h"
-// #include "ciao"
+#include "previsione.h"
 #include "strategiaGreedyPredizione.h"
 #include "strategiaVirtualePredizione.h"
 #include "strategiaVirtuale.h"
@@ -47,7 +47,7 @@ condition_variable flagOff;
 Strategia *currentStrategy;
 StrategiaGreedy straGreedy;
 StrategiaGreedyPredizione straGreedyPredizione;
-// StrategiaVirtualePredizione straVirtualePredizione;
+StrategiaVirtualePredizione straVirtualePredizione;
 StrategiaVirtuale straVirtuale;
 int configurazioneAttuale;
 
@@ -55,10 +55,10 @@ epever *device;
 //Tempo tempo;
 Tempo *tim;
 
-string cfgfilename = "/home/nicolas/Codice/TesiProject/cfg/fmxcku115r1_3.cfg";
+string cfgfilename = "../cfg/fmxcku115r1_3.cfg";
 string comandoUp ="profpga_run "+ cfgfilename+" --up";
 string comandoDown ="profpga_run "+ cfgfilename+" --down";
-string comand="/home/nicolas/Codice/TesiProject/prova3";
+//string comand="/home/nicolas/Codice/TesiProject/prova3";
 
 pthread_attr_t attr;
 struct sched_param param;
@@ -122,17 +122,20 @@ void inizializzazione(){
     }
     pthread_setname_np(pthread_self(), "Main Thread");
     //creazione della strategia
-    tim=new Tempo();
+    tim=new Tempo(0,0,0,0);
     //tempo=Tempo();
     straGreedy=StrategiaGreedy(device);
-    straGreedyPredizione=StrategiaGreedyPredizione(device,tim);
+   // straGreedyPredizione=StrategiaGreedyPredizione(device,tim);
     // straPredizioneSimul=StrategiaPredizioneSimul(device);
-    // straVirtualePredizione=StrategiaVirtualePredizione(device,&tim);
+
+    straVirtualePredizione=StrategiaVirtualePredizione(device,tim);
     straVirtuale=StrategiaVirtuale(device,tim);
 
     currentStrategy=&straVirtuale;
 
     riconfigurare=true;
+    inizializzaMatrice();
+
 
 
 }
@@ -144,6 +147,17 @@ float misuraPotenza(){
     return device->getArrayPower();
 }
 
+void* gestionePrevisioni(void* arg){
+    pthread_setname_np(pthread_self(),"Gestione Previsioni");
+    #ifdef DEBUG_MODE
+     std::cout<<"[T GESTIONE PREVISIONI] gestisco le previsiomi"<<std::endl;
+    #endif
+    currentStrategy->gestionePrevisioni();
+
+    return nullptr;
+
+}
+
 
 void* gestioneStrategia( void* arg){
     pthread_setname_np(pthread_self(),"Strategia");
@@ -153,14 +167,12 @@ void* gestioneStrategia( void* arg){
     int configurazione;
     float batteryStatus;
     while(true){
-      
-
         batteryStatus = getBatteryCharge();
         #ifdef DEBUG_MODE
-       std::cout<<"[T GESTIONE ENERGETICA - gestioneEner] Batteria al: "<<batteryStatus<<"\%"<<std::endl;
+       //std::cout<<"[T GESTIONE ENERGETICA - gestioneEner] Batteria al: "<<batteryStatus<<"\%"<<std::endl;
         #endif
         //currentStrategy->setConsumi(configurazione);
-        configurazione=currentStrategy->strategia(batteryStatus);
+        configurazione=currentStrategy->strategia(batteryStatus,configurazione);
         if (configurazione!=configurazioneAttuale){
             #ifdef DEBUG_MODE
            std::cout<<"Nuova configurazione scelta, attuale= "<<configurazioneAttuale<<", nuova= "<<configurazione<<std::endl;
@@ -206,57 +218,6 @@ void* gestioneStrategia( void* arg){
     return nullptr;
 }
 
-// void gestionePrevisioni(){
-//     CodaCircolare codaMisurazioni=CodaCircolare(5);
-//     inizializzaMatrice();
-//     int ultimoSlot=0;
-//     while(true){
-//         /*
-//         se inizia un nuovo giorno devo fare uno shift verso sinistra di tutta la matrice e rifare le previsioni per il giorno
-//         */
-//         if(giornoNuovo){
-//             #ifdef DEBUG_MODE
-//            std::cout<<"È iniziato un nuovo giorno, calcolo le nuove previsioni"<<std::endl;
-//             #endif
-//            nuovoGiorno();
-//            previsioneDelGiorno(0);
-//            giornoNuovo=false;
-//         }
-//         /*
-//         altrimenti faccio un minimo di 5 misurazioni ogni (FREQUENZA*60/15) secondi e calcolo la media che inserisco nella matrice energetica
-//         */
-//         else{
-//             float potenzaInIngresso=misuraPotenza();
-//             //effettuo una misurazione ogni FREQUENZA/10 min ed ogni FREQUENZA/2 prendo la media delle ultime 5 misruazioni
-//             // e la inseirsco nella matrice delle misurazioni per aggiornare le previsioni
-//             for(int i=0;i<5;i++){
-//                 #ifdef DEBUG_MODE
-//                std::cout<<"Misura potenza in ingresso: "<<potenzaInIngresso<<std::endl;
-//                 #endif
-//                 codaMisurazioni.addElement(potenzaInIngresso);
-//                 this_thread::sleep_for(chrono::minutes(FREQUENZA/10));
-//             }
-//             float mediaMisurazioni=codaMisurazioni.getMedia();
-//             ultimoSlot=setEnergia(mediaMisurazioni);
-//             #ifdef DEBUG_MODE
-//            std::cout<<"slot del giorno: "<<ultimoSlot<<" = "<<media<<std::endl;
-//             #endif
-//             if(ultimoSlot==NN/2 && !giornoUno){
-//                 previsioneDelGiorno(ultimoSlot);
-//                 #ifdef DEBUG_MODE
-//                std::cout<<"È mezzogiorno, riaggiorno le previsioni"<<std::endl;
-//                 #endif
-//             }
-//             if(ultimoSlot>=NNN-1){
-//                 #ifdef DEBUG_MODE
-//                std::cout<<"È l'ultimo slot del giorno, pronto a passare al prossimogiorno"<<std::endl;
-//                 #endif
-//                giornoNuovo=true;
-//                if(giornoUno)giornoUno=false;
-//             }
-//         }
-//     }
-// }
 
 void* gestioneHost(void* args){
     pthread_setname_np(pthread_self(), "Gestione Host");
@@ -271,24 +232,15 @@ void* gestioneHost(void* args){
             flagOff.wait(lck2);
         }}
 
-
+        std::cout<< "[GESTIONE HOST ] eseguo hw"<<std::endl;
+        string img1 = "../immagini/mont5.jpg";
+        string out1 = "../immagin/outputhw.png";
+        string out2 = "../immagini/outputsw.png";
+        string exec = "../bin/main";
         
-        string run ="/tools/prodesign/profpga/proFPGA-2020D-SP2/hdl/demo_designs/mmi64_basic/session/gcc/main " + cfgfilename;
+        string run = exec +" "+ cfgfilename +" " + img1 +" "+ out1 +" "+ out2;
         system(run.c_str());
-
-
-        // #ifdef DEBUG_MODE
-        //std::cout<<"[MAIN GESTIONE HOST] Inizio ad operare"<<std::endl;
-        // int c=0;
-        // while(c<20){
-        //     c+=2;
-        //     this_thread::sleep_for(chrono::seconds(1));
-        //    std::cout<<"[MAIN GESTIONE HOST] opero "<< c <<std::endl;
-
-        // }
-        //std::cout<<"[MAIN GESTIONE HOST] FINISCO di operare"<<std::endl;
-        // #endif
-        this_thread::sleep_for(chrono::seconds(4));
+        this_thread::sleep_for(chrono::seconds(2));
     }
     return nullptr;
 }
@@ -296,15 +248,15 @@ void* gestioneHost(void* args){
 //gestione Tempo
 void* gestioneTempo(void* args){
     pthread_setname_np(pthread_self(), "Gestione Tempo");
+    //tim->incrementsMinutes(700);
     while(true){
-            
-
-        tim->incrementsMinutes(20);
+        
+        tim->incrementsMinutes(10);
         //tempo.incrementa(40);
         #ifdef VIRTUALE
-       std::cout << "[T GESTIONE TEMPO] sono passati 5 minuti, siamo al "<<tim->getTimeInMin()<<" minuto\n";
+       std::cout << "[T GESTIONE TEMPO] sono passati 20 minuti, siamo al "<<tim->getTimeInMin()<<" minuto\n";
         #endif
-        this_thread::sleep_for(chrono::seconds(2));
+        this_thread::sleep_for(chrono::seconds(3));
         //sleep(10);
     }
     return nullptr;
@@ -348,7 +300,7 @@ void* gestioneTempo(void* args){
                 #endif
                 //unique_lock<std::mutex> lck(cfgfilelock);
                 off=false;
-                cfgfilename = "/home/nicolas/Codice/TesiProject/cfg/fmxcku115r1_1.cfg";
+                cfgfilename = "../cfg/fmxcku115r1_1.cfg";
                 exitcode = system(comandoUp.c_str());
                 flagOff.notify_all();
                 
@@ -359,7 +311,7 @@ void* gestioneTempo(void* args){
                 #endif
                 //unique_lock<std::mutex> lck(cfgfilelock);
                 off=false;
-                cfgfilename = "/home/nicolas/Codice/TesiProject/cfg/fmxcku115r1_2.cfg";
+                cfgfilename = "../cfg/fmxcku115r1_2.cfg";
                 exitcode = system(comandoUp.c_str());
                 flagOff.notify_all();
                 break;
@@ -369,7 +321,7 @@ void* gestioneTempo(void* args){
                 #endif
                 //unique_lock<std::mutex> lck(cfgfilelock);
                 off=false;
-                cfgfilename = "/home/nicolas/Codice/TesiProject/cfg/fmxcku115r1_3.cfg";
+                cfgfilename = "../cfg/fmxcku115r1_3.cfg";
                 exitcode = system(comandoUp.c_str());
                 flagOff.notify_all();
                 break;
@@ -448,6 +400,8 @@ int main(){
     pthread_t normalThread1;
     pthread_t normalThread2;
     pthread_t normalThread3;
+    pthread_t normalThread4;
+
    
 
     // pthread_attr_init(&attr);
@@ -470,47 +424,22 @@ int main(){
         std::cerr << "Errore nella creazione del thread a priorità normale" << std::endl;
         return 1;
     }
+    // result = pthread_create(&normalThread2, nullptr, gestionePrevisioni, nullptr);
+    // if (result != 0) {
+    //     std::cerr << "Errore nella creazione del thread a priorità normale" << std::endl;
+    //     return 1;
+    // }
      // Crea un thread con priorità normale
-    result = pthread_create(&normalThread2, nullptr, gestioneStrategia, nullptr);
+    result = pthread_create(&normalThread3, nullptr, gestioneStrategia, nullptr);
     if (result != 0) {
         std::cerr << "Errore nella creazione del thread a priorità normale" << std::endl;
         return 1;
     }
-    result = pthread_create(&normalThread3, &attr, gestioneHost, nullptr);
+    result = pthread_create(&normalThread4, &attr, gestioneHost, nullptr);
     if (result != 0) {
         std::cerr << "Errore nella creazione del thread gestione host " << std::endl;
         return 1;
     }
-
-
-
-    // 1.thread che monitora la batteria e calcola la strategia
-
-
-    // #ifdef DEBUG_MODE
-    //std::cout<<"[MAIN] Inizializzando il sistema"<<std::endl;
-    // #endif
-    // inizializzazione();
-    // //std::thread run(runFpga);
-
-    // #ifdef VIRTUALE
-    //std::cout<<"[MAIN] creo thread che gestisce un tempo virtuale"<<std::endl;
-    // std::thread tempo(gestioneTempo);
-    // #endif
-
-    // #ifdef VIRTUALE
-    //std::cout<<"[MAIN] creo thread che gestisce la strategia"<<std::endl;
-    // #endif
-    // std::thread monitoraggioBatteria(gestioneStrategia);
-
-    // #ifdef DEBUG_MODE
-    //std::cout<<"[MAIN] creo thread che gestisce l'host"<<std::endl;
-    // #endif
-
-    // //2. thread che gestice la comunicazione con l'host
-    // std::thread host(gestioneHost);
-
-
 
     while(true){
         

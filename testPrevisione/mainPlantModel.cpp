@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
             if(misurazioni>0 && !flag){
                 flag = true;
                 int slot=(tempo.getMinutes()+tempo.getHours()*60)/60;
-                previsioneDelGiorno(slot-1,misurazioni);
+                //previsioneDelGiorno(slot-1,misurazioni);
                 printPrevisioni();
             }
             tempo.incrementsMinutes(60);

@@ -1,0 +1,57 @@
+-Giornata soleggiata
+ estiva : 
+Giugno (5, minuto  21600) giorno 10 -> minuto 36000
+10 [ , 0, 0, 0, 0, 0, 51, 136, 227, 315, 390, 448, 482, 489, 468, 423, 357, 274, 183, 94, 21, 0, 0, 0, 0]
+    potenza max 489 alle ore 12
+    energia cumulata 4358
+Giugno (5) giorno 24 -> minuto   56160
+24 [ , 0, 0, 0, 0, 0, 33, 115, 208, 298, 376, 437, 472, 482, 464, 420, 354, 270, 178, 87, 14, 0, 0, 0, 0] 
+       potenza max 482 alle ore 12  energia cumulata 4208
+
+Giornata nuvolosa
+estiva
+Giugno
+11 [ , 0, 0, 0, 0, 0, 3, 7, 12, 224, 289, 133, 294, 313, 306, 310, 252, 281, 97, 94, 20, 0, 0, 0, 0] 
+potenza max 313 alle ore 12  energia cumulata 2635
+
+13 [ , 0, 0, 0, 0, 0, 13, 57, 189, 276, 219, 408, 292, 119, 39, 248, 324, 133, 26, 4, 1, 0, 0, 0, 0] 
+potenza max 408 alle ore 10  energia cumulata 2348
+
+
+November media 527
+sotto la media
+14 [ , 0, 0, 0, 0, 0, 0, 0, 0, 4, 6, 9, 10, 10, 8, 9, 3, 0, 0, 0, 0, 0, 0, 0, 0] potenza max 10 alle ore 11  energia cumulata 59
+
+6 [ , 0, 0, 0, 0, 0, 0, 0, 21, 97, 12, 17, 19, 50, 34, 11, 87, 16, 0, 0, 0, 0, 0, 0, 0] potenza max 97 alle ore 8]  energia cumulata 364
+
+17 [ , 0, 0, 0, 0, 0, 0, 0, 0, 4, 8, 12, 15, 38, 35, 131, 62, 0, 0, 0, 0, 0, 0, 0, 0] potenza max 131 alle ore 14]  energia cumulata 305
+
+3 [ , 0, 0, 0, 0, 0, 0, 0, 24, 4, 13, 33, 35, 129, 133, 53, 4, 2, 0, 0, 0, 0, 0, 0, 0] potenza max 133 alle ore 13]  energia cumulata 430
+
+sopra la media
+8 [ , 0, 0, 0, 0, 0, 0, 0, 15, 86, 11, 61, 63, 133, 141, 48, 20, 2, 0, 0, 0, 0, 0, 0, 0] potenza max 141 alle ore 13]  energia cumulata 580
+
+9 [ , 0, 0, 0, 0, 0, 0, 0, 14, 85, 64, 137, 159, 165, 52, 74, 79, 1, 0, 0, 0, 0, 0, 0, 0] potenza max 165 alle ore 12]  energia cumulata 830
+
+7 [ , 0, 0, 0, 0, 0, 0, 0, 5, 27, 159, 139, 146, 162, 106, 51, 79, 12, 0, 0, 0, 0, 0, 0, 0] potenza max 162 alle ore 12]  energia cumulata 886
+
+
+
+Giugno
+25 [ , 0, 0, 0, 0, 0, 31, 110, 202, 291, 367, 426, 459, 466, 442, 398, 331, 251, 44, 28, 2, 0, 0, 0, 0] potenza max 466 alle ore 12]  energia cumulata 3848
+27 [ , 0, 0, 0, 0, 0, 27, 107, 200, 290, 368, 427, 461, 470, 449, 404, 338, 256, 166, 77, 10, 0, 0, 0, 0] potenza max 470 alle ore 12]  energia cumulata 4050
+29 [ , 0, 0, 0, 0, 0, 22, 99, 190, 279, 300, 412, 447, 457, 438, 394, 329, 246, 119, 58, 5, 0, 0, 0, 0] potenza max 457 alle ore 12]  energia cumulata 3795
+ sotto la media
+ 
+ 
+Aprile media 3204
+sopra la media
+3 [ , 0, 0, 0, 0, 0, 9, 104, 89, 242, 373, 430, 463, 468, 443, 392, 320, 208, 112, 47, 0, 0, 0, 0, 0] potenza max 468 alle ore 12]  energia cumulata 3700
+5 [ , 0, 0, 0, 0, 0, 29, 60, 208, 301, 380, 438, 469, 472, 453, 401, 221, 170, 7, 3, 0, 0, 0, 0, 0] potenza max 472 alle ore 12]  energia cumulata 3612
+9 [ , 0, 0, 0, 0, 0, 41, 129, 228, 321, 401, 461, 494, 499, 343, 298, 349, 260, 163, 69, 5, 0, 0, 0, 0] potenza max 499 alle ore 12]  energia cumulata 4061
+
+sotto la media 
+0 [ , 0, 0, 0, 0, 0, 2, 5, 10, 100, 206, 47, 110, 218, 238, 129, 158, 41, 9, 3, 0, 0, 0, 0, 0] potenza max 238 alle ore 13]  energia cumulata 1276
+1 [ , 0, 0, 0, 0, 0, 2, 5, 10, 18, 37, 30, 151, 274, 88, 148, 234, 133, 7, 3, 0, 0, 0, 0, 0] potenza max 274 alle ore 12]  energia cumulata 1140
+2 [ , 0, 0, 0, 0, 0, 8, 41, 38, 26, 198, 244, 44, 182, 212, 211, 313, 222, 127, 41, 0, 0, 0, 0, 0] potenza max 313 alle ore 15]  energia cumulata 1907
+

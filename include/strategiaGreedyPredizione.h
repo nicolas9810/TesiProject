@@ -26,7 +26,7 @@ public:
     StrategiaGreedyPredizione();
     StrategiaGreedyPredizione(epever *dev,Tempo *t);
     StrategiaGreedyPredizione& operator=(const StrategiaGreedyPredizione& other);
-    virtual int strategia(float batteryCharge);
+    virtual int strategia(float batteryCharge,int conf);
     virtual int getBestConfig(float predizione);
     void gestionePrevisioni();
     float misuraPotenza(epever* dev);

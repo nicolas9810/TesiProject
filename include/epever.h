@@ -138,7 +138,7 @@ public:
     float getChargingPower() const;
     float getBatteryCurrentL() const;
     float getDischargeCurrentEqui() const;
-    float getOutputPower() const ;
+    float getOutputPower(int c) const ;
     float getBatteryCurrentStatus() const;
 
 

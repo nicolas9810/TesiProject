@@ -2,7 +2,7 @@
 #define PREVISIONE_H
 
 #include "GreenPlantModel.h"
-
+#include "tempo.h"
 
 double previsioneEnergiaDisponibile(int n,int min);
 void inizializzaMatrice();
@@ -18,5 +18,7 @@ void inizializzaMatriceTest(GreenPlantModel model);
 void printMatriceEnergetica();
 void printPrevisioni();
 void setEner(int i,int j,double e);
+void gestionePrevisioniVirtuale(Tempo *tempo, GreenPlantModel *modello);
+
 
 #endif //PREVISIONE_H

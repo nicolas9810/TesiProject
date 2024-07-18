@@ -25,11 +25,11 @@ public:
     bool giornoUno;
     Tempo *time;
 
-    GreenPlantModel *model;
+    GreenPlantModel *modelloPannello;
 
     
     StrategiaVirtualePredizione();
-    StrategiaVirtualePredizione(epever *dev,Tempo *t,GreenPlantModel *m);
+    StrategiaVirtualePredizione(epever *dev,Tempo *t);
     StrategiaVirtualePredizione& operator=(const StrategiaVirtualePredizione& other);
     // StrategiaVirtualePredizione(const StrategiaVirtualePredizione& other) = default;
     // StrategiaVirtualePredizione(StrategiaVirtualePredizione&& other) noexcept;
@@ -37,7 +37,7 @@ public:
     // StrategiaVirtualePredizione& operator=(StrategiaVirtualePredizione&& other) noexcept;
 
 
-    virtual int strategia(float batteryCharge);
+    virtual int strategia(float batteryCharge,int conf);
     virtual int getBestConfig(float predizione);
     void gestionePrevisioni();
     float misuraPotenza(epever* dev);

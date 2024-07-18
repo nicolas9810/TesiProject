@@ -67,8 +67,13 @@ float epever::getLoadVoltage() const {
 }
 
 //ottengo la potenza in uscita dalla batteria
-float epever::getOutputPower() const {
-    return epever::getLoadVoltage()*epever::getLoadCurrent();
+float epever::getOutputPower(int c) const {
+    switch(c){
+        case 1:return epever::getLoadVoltage()*epever::getLoadCurrent();
+        case 2:return epever::getLoadVoltage()*epever::getLoadCurrent()+33;
+        case 3:return epever::getLoadVoltage()*epever::getLoadCurrent()+68;
+        default:return epever::getLoadVoltage()*epever::getLoadCurrent();
+    }
 }
 
 float epever::getBatteryCurrentL() const {

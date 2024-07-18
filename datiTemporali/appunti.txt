@@ -1,0 +1,3 @@
+come compilare giornate significative
+
+g++ giornatesignificative.cpp GreenPlantModel.cpp -o giornate -g
