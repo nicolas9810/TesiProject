@@ -55,6 +55,7 @@ CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.o: ../include/chargeControll
 CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.o: ../include/defines.h
 CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.o: ../include/epever.h
 CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.o: ../include/strategia.h
+CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.o: ../include/tempo.h
 CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.o: ../src/strategia.cpp
 CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.o: /usr/local/include/modbus/modbus-rtu.h
 CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.o: /usr/local/include/modbus/modbus-tcp.h
@@ -66,6 +67,7 @@ CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.o: ../include/defines.
 CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.o: ../include/epever.h
 CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.o: ../include/strategia.h
 CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.o: ../include/strategiaGreedy.h
+CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.o: ../include/tempo.h
 CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.o: ../src/strategiaGreedy.cpp
 CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.o: /usr/local/include/modbus/modbus-rtu.h
 CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.o: /usr/local/include/modbus/modbus-tcp.h

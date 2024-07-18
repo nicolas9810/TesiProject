@@ -56,6 +56,7 @@ CMakeFiles/gestioneEnergetica.dir/src/strategia.cpp.o
  ../include/defines.h
  ../include/epever.h
  ../include/strategia.h
+ ../include/tempo.h
  /home/nicolas/Codice/TesiProject/src/strategia.cpp
  /usr/local/include/modbus/modbus-rtu.h
  /usr/local/include/modbus/modbus-tcp.h
@@ -67,6 +68,7 @@ CMakeFiles/gestioneEnergetica.dir/src/strategiaGreedy.cpp.o
  ../include/epever.h
  ../include/strategia.h
  ../include/strategiaGreedy.h
+ ../include/tempo.h
  /home/nicolas/Codice/TesiProject/src/strategiaGreedy.cpp
  /usr/local/include/modbus/modbus-rtu.h
  /usr/local/include/modbus/modbus-tcp.h
