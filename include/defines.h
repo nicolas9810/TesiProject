@@ -10,6 +10,7 @@ Le possibilità sono
 */
 #define NN 24
 #define FREQUENZA 24*60/NN
+#define FINESTRAPREDIZIONE 10
 /* Numero ideale tra 10 e 11*/
 #define DAYS 4
 
