@@ -35,11 +35,8 @@ bool flagInterrupt;
 mutex mutexFlag;
 condition_variable cv;
 
-mutex host;
-bool riconfigurare;
-condition_variable riconf;
 
-mutex cfgfilelock;
+
 
 bool off=true;
 condition_variable flagOff;
@@ -67,10 +64,10 @@ float EnergiaEffettivaAccumulata;
 float gap;
 GreenPlantModel *modelloPannello;
 
-string cfgfilename = "../cfg/fmxcku115r1_3.cfg";
-string comandoUp ="profpga_run "+cfgfilename+" --up";
-string comandoDown ="profpga_run "+cfgfilename+" --down";
-string comand="/home/nicolas/Codice/TesiProject/prova3";
+string cfgfilename = "../cfg/fmxcku115r1_1.cfg";
+//string comandoUp ="profpga_run "+cfgfilename+" --up";
+// string comandoDown ="profpga_run "+cfgfilename+" --down";
+
 
 
 
@@ -132,14 +129,14 @@ void inizializzazione(){
     modelloPannello=new GreenPlantModel("../csv/2018.csv");
     // pthread_setname_np(pthread_self(), "Main Thread");
     //creazione della strategia
-    tim=new Tempo(0,7,30,0);
+    tim=new Tempo(1,8,30,0);
     //tempo=Tempo();
     tempoUltimaMisurazione=tim->getTimeInMin();
-    straGreedy=StrategiaGreedy(device);
+    //straGreedy=StrategiaGreedy(device);
     //straGreedyPredizione=StrategiaGreedyPredizione(device,tim);
     // =StrategiaPredizioneSimul(device);
     //straVirtualePredizione=StrategiaVirtualePredizione(device,&tim);
-    straVirtuale=StrategiaVirtuale(device,tim);
+    //straVirtuale=StrategiaVirtuale(device,tim);
 
     //currentStrategy=&straVirtuale;
     //string comand="/home/nicolas/Codice/TesiProject/prova";
@@ -156,9 +153,8 @@ float misuraPotenza(){
 }
 
 float previsione(int t){
-    /* TODO 
     
-    ritornare energia nella finestra di tempo successiva con una percentaule di errore del 20/15%*/
+    //ritornare energia nella finestra di tempo successiva con una percentaule di errore del 20/15%*/
     float energiaInArrivo=0;
     for(int i= t;i< t+FINESTRAPREDIZIONE;i++){
         energiaInArrivo+= modelloPannello->getProducedPowerByTime(i);
@@ -293,73 +289,11 @@ void gestioneStrategia(){
   
 }
 
-// void gestionePrevisioni(){
-//     CodaCircolare codaMisurazioni=CodaCircolare(5);
-//     inizializzaMatrice();
-//     int ultimoSlot=0;
-//     while(true){
-//         /*
-//         se inizia un nuovo giorno devo fare uno shift verso sinistra di tutta la matrice e rifare le previsioni per il giorno
-//         */
-//         if(giornoNuovo){
-//             #ifdef DEBUG_MODE
-//             cout<<"È iniziato un nuovo giorno, calcolo le nuove previsioni"<<endl;
-//             #endif
-//            nuovoGiorno();
-//            previsioneDelGiorno(0);
-//            giornoNuovo=false;
-//         }
-//         /*
-//         altrimenti faccio un minimo di 5 misurazioni ogni (FREQUENZA*60/15) secondi e calcolo la media che inserisco nella matrice energetica
-//         */
-//         else{
-//             float potenzaInIngresso=misuraPotenza();
-//             //effettuo una misurazione ogni FREQUENZA/10 min ed ogni FREQUENZA/2 prendo la media delle ultime 5 misruazioni
-//             // e la inseirsco nella matrice delle misurazioni per aggiornare le previsioni
-//             for(int i=0;i<5;i++){
-//                 #ifdef DEBUG_MODE
-//                 cout<<"Misura potenza in ingresso: "<<potenzaInIngresso<<endl;
-//                 #endif
-//                 codaMisurazioni.addElement(potenzaInIngresso);
-//                 this_thread::sleep_for(chrono::minutes(FREQUENZA/10));
-//             }
-//             float mediaMisurazioni=codaMisurazioni.getMedia();
-//             ultimoSlot=setEnergia(mediaMisurazioni);
-//             #ifdef DEBUG_MODE
-//             cout<<"slot del giorno: "<<ultimoSlot<<" = "<<media<<endl;
-//             #endif
-//             if(ultimoSlot==NN/2 && !giornoUno){
-//                 previsioneDelGiorno(ultimoSlot);
-//                 #ifdef DEBUG_MODE
-//                 cout<<"È mezzogiorno, riaggiorno le previsioni"<<endl;
-//                 #endif   
-//             }
-//             if(ultimoSlot>=NNN-1){
-//                 #ifdef DEBUG_MODE
-//                 cout<<"È l'ultimo slot del giorno, pronto a passare al prossimogiorno"<<endl;
-//                 #endif
-//                giornoNuovo=true;
-//                if(giornoUno)giornoUno=false;
-//             }         
-//         }
-//     }    
-// }
 
-void* gestioneHost(void* args){
-    pthread_setname_np(pthread_self(), "Gestione Host");
-    while(true){
-        {
-            unique_lock<std::mutex> lck(host);
-            if(riconfigurare){
-                riconf.wait(lck);
-            }
-        }
-            {unique_lock<std::mutex> lck2(cfgfilelock);
-            if(off){
-                flagOff.wait(lck2);
-            }
-        }
 
+
+void gestioneHost(){
+    
         std::cout<< "[GESTIONE HOST ] eseguo hw"<<std::endl;
         string img1 = "../immagini/mont5.jpg";
         string out1 = "../immagin/outputhw.png";
@@ -369,8 +303,6 @@ void* gestioneHost(void* args){
         string run = exec +" "+ cfgfilename +" " + img1 +" "+ out1 +" "+ out2;
         system(run.c_str());
         this_thread::sleep_for(chrono::seconds(2));
-    }
-    return nullptr;
 }
 //gestione Tempo
 void* gestioneTempo(void* args){
@@ -380,13 +312,13 @@ void* gestioneTempo(void* args){
         unique_lock<std::mutex> lck(tempo);
         tim->incrementsMinutes(1);
     }
-    slotAttuale=(int)(tim->getMinutes()+tim->getHours()*60)/FREQUENZA;
-    //tempo.incrementa(40);
+
+  
     #ifdef VIRTUALE
     cout << "[T GESTIONE TEMPO] sono passati 5 minuti, siamo al "<<tim->getTimeInMin()<<" minuto\n";
     #endif
     this_thread::sleep_for(chrono::seconds(2));
-    //sleep(10);
+  
     }
     return nullptr;
 }
@@ -394,6 +326,7 @@ void* gestioneTempo(void* args){
 /* +++++++++++++++++++++ ROUTINE ++++++++++++++++++++++++++++++++*/
 
     void routineSpegni(int& interrupt){
+        string comandoDown ="profpga_run "+cfgfilename+" --down";
         int exitcode = system(comandoDown.c_str());
         interrupt =-1;
     }
@@ -404,8 +337,8 @@ void* gestioneTempo(void* args){
         #endif
         configurazioneAttuale=interrupt;
         int exitcode;
-        unique_lock<std::mutex> lck1(host);
-        unique_lock<std::mutex> lck(cfgfilelock);
+        string comandoDown;
+        string comandoUp;
         switch (configurazioneAttuale)
         {
         case 0:
@@ -413,11 +346,11 @@ void* gestioneTempo(void* args){
             cout<<"[MAIN - ROUT conf 0] "<<interrupt<<endl;
             #endif
             off=true;
+            comandoDown ="profpga_run "+cfgfilename+" --down";
             exitcode = system(comandoDown.c_str());
             #ifdef DEBUG_MODE
             cout<<"[MAIN - ROUT conf 0 down] "<<cfgfilename<<endl;
             #endif
-            flagOff.notify_all();
             break;
         case 1:
         #ifdef DEBUG_MODE
@@ -425,11 +358,12 @@ void* gestioneTempo(void* args){
             #endif
             off=false;
             cfgfilename = "../cfg/fmxcku115r1_1.cfg";
+            comandoUp ="profpga_run "+cfgfilename+" --up";
             #ifdef DEBUG_MODE
             cout<<"[MAIN - ROUT conf 1] "<<cfgfilename<<endl;
             #endif
             exitcode = system(comandoUp.c_str());
-            flagOff.notify_all();
+            
             break;
         case 2:
             #ifdef DEBUG_MODE
@@ -440,8 +374,9 @@ void* gestioneTempo(void* args){
             #ifdef DEBUG_MODE
             cout<<"[MAIN - ROUT conf 2] "<<cfgfilename<<endl;
             #endif
+            comandoUp ="profpga_run "+cfgfilename+" --up";
             exitcode = system(comandoUp.c_str());
-            flagOff.notify_all();
+            
             break;
         case 3:
             #ifdef DEBUG_MODE
@@ -452,20 +387,21 @@ void* gestioneTempo(void* args){
             #ifdef DEBUG_MODE
             cout<<"[MAIN - ROUT conf 3] "<<cfgfilename<<endl;
             #endif
+            comandoUp ="profpga_run "+cfgfilename+" --up";
             exitcode = system(comandoUp.c_str());
-            flagOff.notify_all();
+            
             break;
         default:
             #ifdef DEBUG_MODE
             cout<<"[MAIN - ROUT conf default] "<<interrupt<<endl;
             #endif
             off=true;
+            comandoDown ="profpga_run "+cfgfilename+" --down";
             exitcode = system(comandoDown.c_str());
-            flagOff.notify_all();
+            
             break;
         }
-        riconfigurare=true;
-        riconf.notify_all();
+        
 
         interrupt=-1;
 
@@ -500,20 +436,6 @@ void checkInterrupt(){
         }
 }
 
-void runFpga(){
-    //pthread_setname_np(pthread_self(), "Run");
-    string cfgfilename = "/home/nicolas/Codice/TesiProject/cfg/fmxcku115r1.cfg";
-    string comando ="/home/nicolas/Codice/TesiProject/prova";
-    try {
-        bp::system(comando);  // Esegue il comando
-    } catch (const std::exception &e) {
-        std::cerr << "Errore durante l'esecuzione del comando: " << e.what() << "\n";
-    }
-    cout<<"[MAIN] sezione critica termianta"<<endl;
-    sleep(3);
-    
-    return;
-}
 
 int main(){
 
@@ -529,9 +451,7 @@ int main(){
     #ifdef DEBUG_MODE
     cout<<"[MAIN] Inizializzando il sistema"<<endl;
     #endif
-    // pthread_setname_np(pthread_self(), "Main Thread");
-    //creazione della strategia
-    
+
     inizializzazione();
     int result = pthread_create(&normalThread1, nullptr, gestioneTempo, nullptr);
     if (result != 0) {
@@ -541,18 +461,13 @@ int main(){
     #ifdef DEBUG_MODE
     cout<<"[MAIN] creo thread che gestisce l'host"<<endl;
     #endif
-    result = pthread_create(&normalThread1, nullptr, gestioneHost, nullptr);
-    if (result != 0) {
-        std::cerr << "Errore nella creazione del thread a priorità normale" << std::endl;
-        return 1;
-    }
+
     EnergiaPrevista=modelloPannello->getProducedPowerByTime(tim->getTimeInMin())*FINESTRAPREDIZIONE;
     #ifdef DEBUG_MODE
     cout<<"[MAIN] Predizione iniziale "<< EnergiaPrevista<<endl;
     #endif
-    while(c<100){
+    while(true){
         
-        //runFpga();
        
 
         int tempoAttuale;
@@ -566,6 +481,8 @@ int main(){
             cout<<"[MAIN] Cerco strategia nuova"<<endl;
             #endif
             gestioneStrategia();
+        }else if(!off){
+            gestioneHost();
         }
 
         
@@ -577,10 +494,8 @@ int main(){
             cout<<"[MAIN] controllo interrupt"<<endl;
             #endif
             checkInterrupt();
+            flagInterrupt=false;
         }
-        flagInterrupt=false;
-        c++;
-        sleep(2);
     }
 
     #ifdef DEBUG_MODE

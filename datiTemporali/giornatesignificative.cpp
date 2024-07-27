@@ -1,11 +1,10 @@
 
-#include "previsione.h"
+// #include "previsione.h"
 #include "GreenPlantModel.h"
 #include <iostream>
 #include <cstdlib> 
 #include <thread>
 #include <chrono>
-#include "tempo.h"
 
 
 int main(int argc, char* argv[]) {

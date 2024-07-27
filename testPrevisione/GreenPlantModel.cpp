@@ -27,7 +27,7 @@ const std::unordered_map<std::string, int> GreenPlantModel::csvColumMap = {
     {"Wind Speed", 22}
 };
 
-const double GreenPlantModel::A1 = 10;
+const double GreenPlantModel::A1 = 2;
 const double GreenPlantModel::A2 = 0;
 const double GreenPlantModel::Cp = 0.75;
 const double GreenPlantModel::R = 287.0500676;
