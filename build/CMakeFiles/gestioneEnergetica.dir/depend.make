@@ -4,6 +4,9 @@
 CMakeFiles/gestioneEnergetica.dir/src/GreenPlantModel.cpp.o: ../include/GreenPlantModel.h
 CMakeFiles/gestioneEnergetica.dir/src/GreenPlantModel.cpp.o: ../src/GreenPlantModel.cpp
 
+CMakeFiles/gestioneEnergetica.dir/src/batteria.cpp.o: ../include/batteria.h
+CMakeFiles/gestioneEnergetica.dir/src/batteria.cpp.o: ../src/batteria.cpp
+
 CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o: ../include/chargeController.h
 CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o: ../include/epever.h
 CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o: ../src/epever.cpp
@@ -13,6 +16,7 @@ CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o: /usr/local/include/modbus/mo
 CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o: /usr/local/include/modbus/modbus.h
 
 CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: ../include/GreenPlantModel.h
+CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: ../include/batteria.h
 CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: ../include/chargeController.h
 CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: ../include/defines.h
 CMakeFiles/gestioneEnergetica.dir/src/gestioneEnergetica.cpp.o: ../include/epever.h

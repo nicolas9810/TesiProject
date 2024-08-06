@@ -43,3 +43,9 @@ Le possibilità sono
 #define DEBUG_MODE
 #define VIRTUALE
 
+//BATTERY 
+#define ENMAX 1200
+#define EFFICIENCY 0.9
+#define LOSS 0.1
+#define MINIMUMCHARGE 30
+

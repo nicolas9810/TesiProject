@@ -7,6 +7,7 @@ class Batteria{
         float Ea;           //  Energia accumulata in una finestra temporale
         float Ec;           //  Energia consumata in una finestra temporale
         float Ep;           //  Energia Prevista
+        float gap;
 
         float Pin;          //  Potenza in ingresso;
         float Pout;         //  Potenza in uscita;
@@ -19,11 +20,12 @@ class Batteria{
 
     public:
 
+    Batteria();
     Batteria (int enMax,float e, float kappa, float con,int finestra); 
 
     void setEnergiaMax(float e);
     void setEnergia(float e);
-    void setEnergiaAccumulata(float e);
+    float setEnergiaAccumulata(float e);
     void setEnergiaConsumata(float e);
     void setEnergiaPrevista(float e);
 
@@ -42,16 +44,17 @@ class Batteria{
     float getEfficienza();
     float getCoefPerdite();
 
-    float SoC();
+    int SoC();
 
     float charge(float p, int time);
     float discharge(float p,int time);
+    float chargeDischarge();
     float energiaAccumulata(int p,int time);
     float energiaConsumata(int p,int time);
     float energiaPrevista(int p,int time);
 
 
-    int findConfiguration(int *potenze);
+    int findConfiguration(float *potenze,int f);
 
 
 

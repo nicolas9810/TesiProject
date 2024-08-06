@@ -22,6 +22,8 @@ cmath
 string
 -
 
+../include/batteria.h
+
 ../include/chargeController.h
 
 ../include/defines.h
@@ -141,6 +143,8 @@ pthread.h
 -
 previsione.h
 /home/nicolas/Codice/TesiProject/src/previsione.h
+batteria.h
+/home/nicolas/Codice/TesiProject/src/batteria.h
 
 /usr/local/include/modbus/modbus-rtu.h
 modbus.h

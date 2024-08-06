@@ -1,3 +1,5 @@
 come compilare giornate significative
 
 g++ giornatesignificative.cpp GreenPlantModel.cpp -o giornate -g
+
+ g++ calcolimensili.cpp GreenPlantModel.cpp -o calcolim

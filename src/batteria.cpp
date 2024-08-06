@@ -1,12 +1,18 @@
 #include "batteria.h"
+#include <iostream>
+
 
 Batteria::Batteria(int enMax,float e, float kappa, float con,int finestra){
         Emax=enMax;
+        E=Emax;
         eta=e;
         k=kappa;
         c=con;
         F=finestra;
         gap=0;
+}
+Batteria::Batteria(){
+
 }
 
 void  Batteria::setEnergiaMax(float e)
@@ -22,9 +28,10 @@ void  Batteria::setEnergia(float e)
         E=e;
     }
 }
-void  Batteria::setEnergiaAccumulata(float e)
+float Batteria::setEnergiaAccumulata(float e)
 {
     Ea=e;
+    return Ea;
 }
 void  Batteria::setEnergiaConsumata(float e )
 {
@@ -79,7 +86,7 @@ float Batteria:: getCoefPerdite()
     return k;
 }
 
-float Batteria::SoC(){
+int Batteria::SoC(){
         return (E/Emax)*100;
 }
 
@@ -106,36 +113,70 @@ float Batteria::discharge(float potenza,int tempo)
     }
     return E;
 }
+float Batteria::chargeDischarge(){
+    std::cout<<"[BATTERIA - pre] Energia ="<< E<<std::endl;
+    E+=Ea*(eta-k);
+    E-=Ec;
+    if(E>Emax){
+        E=Emax;
+    }else if(E<0){
+        E=0;
+    }
+    std::cout<<"[BATTERIA - post] Energia ="<< E<<std::endl;
+
+    return E;
+}
 
 float Batteria::energiaAccumulata(int p,int t)
 {
-    Ea=p*t;
+    Ea=p*t/60;
     return Ea;
 }
 
 float Batteria::energiaConsumata(int p,int t)
 {
-    Ec=p*t;
-    return Ec;;
+    Ec=p*t/60;
+    return Ec;
 }
 float Batteria::energiaPrevista(int p,int t)
 {
-    Ep=p*t;
+    Ep=p*t/60;
     return Ep;
 }
 
-int Batteria::findConfiguration(int *potenze)
+int Batteria::findConfiguration(float *potenze,int f)
 {
     float soc=SoC();
-    if(SoC()<c){
+    if(soc<c){
         return 0;
     }
     bool flag=false;
     int i=3;
-    while(i>0 || flag){
-        float consumo=potenze[i]*F;
-        float proiezione=Ep-consumo+gap+E;
-        if(proiezione>c){
+    if(soc<=100){
+
+        while(i>0 && !flag){
+            
+            float consumo=potenze[i]*2;
+            float proiezione=Ep*6-consumo+gap;
+            #ifdef DEBUG_MODE
+            std::cout<<"[Cerco conf -] conf = "<< i <<", previsione"<<proiezione<<std::endl;
+            #endif
+            if((proiezione/Emax)*100>c){
+                flag=true;
+                break;
+            }
+            i--;
+        }
+        return i;
+    }
+    while(i>0 && !flag){
+        
+        float consumo=potenze[i]*2;
+        float proiezione=Ep*6-consumo+gap+E;
+        #ifdef DEBUG_MODE
+        std::cout<<"[Cerco conf -] conf = "<< i <<", previsione"<<proiezione<<std::endl;
+        #endif
+        if((proiezione/Emax)*100>c){
             flag=true;
             break;
         }
