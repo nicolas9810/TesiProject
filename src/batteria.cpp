@@ -147,32 +147,15 @@ float Batteria::energiaPrevista(int p,int t)
 int Batteria::findConfiguration(float *potenze,int f)
 {
     float soc=SoC();
-    if(soc<c){
+    if(soc<90){
         return 0;
     }
     bool flag=false;
     int i=3;
-    if(soc<=100){
-
-        while(i>0 && !flag){
-            
-            float consumo=potenze[i]*2;
-            float proiezione=Ep*6-consumo+gap;
-            #ifdef DEBUG_MODE
-            std::cout<<"[Cerco conf -] conf = "<< i <<", previsione"<<proiezione<<std::endl;
-            #endif
-            if((proiezione/Emax)*100>c){
-                flag=true;
-                break;
-            }
-            i--;
-        }
-        return i;
-    }
     while(i>0 && !flag){
-        
+           
         float consumo=potenze[i]*2;
-        float proiezione=Ep*6-consumo+gap+E;
+        float proiezione=Ep*6-consumo+gap;
         #ifdef DEBUG_MODE
         std::cout<<"[Cerco conf -] conf = "<< i <<", previsione"<<proiezione<<std::endl;
         #endif

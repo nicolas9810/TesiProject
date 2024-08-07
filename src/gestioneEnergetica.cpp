@@ -131,7 +131,7 @@ void inizializzazione(){
     modelloPannello=new GreenPlantModel("../csv/2018.csv");
     // pthread_setname_np(pthread_self(), "Main Thread");
     //creazione della strategia
-    tim=new Tempo(90,8,0,0);
+    tim=new Tempo(0,8,0,0);
     //tempo=Tempo();
     tempoUltimaMisurazione=tim->getTimeInMin();
     //Batteria ( Energia Max, efficienza, coef di peridite, limite di scaricamento, finestra di predizione)
