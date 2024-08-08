@@ -57,6 +57,7 @@ epever *device;
 mutex tempo;
 condition_variable cvtempo;
 Tempo *tim;
+int giornoAttuale;
 
 int tempoUltimaMisurazione;
 int slotAttuale;
@@ -132,6 +133,7 @@ void inizializzazione(){
     // pthread_setname_np(pthread_self(), "Main Thread");
     //creazione della strategia
     tim=new Tempo(90,8,0,0);
+    giornoAttuale=90;
     //tempo=Tempo();
     tempoUltimaMisurazione=tim->getTimeInMin();
     //Batteria ( Energia Max, efficienza, coef di peridite, limite di scaricamento, finestra di predizione)
@@ -215,6 +217,14 @@ float energiaArrivata(int t){
     std::cout<<"[ENERGIA ARRIVATA ="<< energiaInput/60<<" che diventa "<<(energiaInput/60)*0.8<<std::endl;
 
     return batteria->setEnergiaAccumulata(energiaInput/60);
+}
+
+float energiaPrevistaDomani(){
+    float energia=0;
+    int minuto=(giornoAttuale+1)*24*60;
+    for(int i=0;i<1440;i+=60){
+        energia+=modelloPannello->getProducedPowerByTime(minuto+i);
+    }
 }
 
 int strategia(){
@@ -336,6 +346,9 @@ void* gestioneTempo(void* args){
     int minuti=tim->getMinutes();
     int ore=tim->getHours();
     int giorno=tim->getDay();
+    if(giorno!=giornoAttuale){
+        giornoAttuale=giorno;
+    }
   
     #ifdef VIRTUALE
     cout << "[T GESTIONE TEMPO] sono passati minuti, è il giorno "<<giorno<<" e le ore"<<ore<<":"<<minuti<<"\n";
