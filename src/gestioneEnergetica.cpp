@@ -58,6 +58,7 @@ mutex tempo;
 condition_variable cvtempo;
 Tempo *tim;
 int giornoAttuale;
+float energiaDomani;
 
 int tempoUltimaMisurazione;
 int slotAttuale;
@@ -163,7 +164,7 @@ float previsione(int t){
     
     //ritornare energia nella finestra di tempo successiva con una percentaule di errore del 20/15%*/
     float energiaInArrivo=0;
-    for(int i= t;i< t+120;i++){
+    for(int i= t;i< t+FINESTRA;i++){
         energiaInArrivo+= modelloPannello->getProducedPowerByTime(i);
     }
     float erroreRandom= static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
@@ -187,22 +188,36 @@ float GAP(){
 
 float consumi[]={40,89,120,150};
 
-int configurazione(int finestra){
-    return batteria->findConfiguration(consumi,finestra);
-    
-    // float delta;
-    // for(int i=MAXPOWER;i>=OFF;i--){
-    //     delta=EnergiaPrevista-consumi[i]*FINESTRAPREDIZIONE + gap;
-    //     #ifdef DEBUG_MODE
-    //     cout<<"[Cerco conf -] delta = "<< delta <<" = Energia Prevista "<< EnergiaPrevista<<" - " <<consumi[i]*FINESTRAPREDIZIONE<<"(consumi "<<i<<") + "<<gap<<"\n";
-    //     #endif
-    //     //se trovo una configurazione che rientra
-    //     if(delta>0){
-    //         return i;
-    //     }
-    // }
-    // //se non trovo niente, significa che non può caricarsi in questo momento
-    // return 0;
+
+
+
+int configurazione(){
+    int z = energiaPrevistaDomani()/batteria->getEnergiaMax();
+    if(z>1){
+        z=1;
+    }
+    int tau = tempoProssimaRicarica(tim->getTimeInMin());
+    float c= consumi[0]*tau;
+    float energiaBatt=batteria->getEnergia();
+    if(z*energiaBatt-c>0){
+        int i=3;
+        bool flag=false;
+         while(i>0 && !flag){
+            
+            float consumo=(consumi[i]/60)*FINESTRA;
+            float proiezione=EnergiaPrevista-consumo+energiaBatt;
+            #ifdef DEBUG_MODE
+            std::cout<<"[Cerco conf -] conf = "<< i <<", previsione"<<proiezione<<std::endl;
+            #endif
+            if(proiezione > c){
+                flag=true;
+                break;
+            }
+            i--;
+        }
+        return i;
+    }
+    return 0;
 }
 float consumo(int t){
     return batteria->energiaConsumata(consumi[configurazioneAttuale],(t-tempoUltimaMisurazione));
@@ -225,6 +240,11 @@ float energiaPrevistaDomani(){
     for(int i=0;i<1440;i+=60){
         energia+=modelloPannello->getProducedPowerByTime(minuto+i);
     }
+    return energia;
+}
+int tempoProssimaRicarica(int t){
+    int tau =0;
+    return tau;
 }
 
 int strategia(){
@@ -232,9 +252,16 @@ int strategia(){
     if(soc==0){
         cout<<"BATTERIA ALLO 0%\n";
     }
+
+   
+
     int tempoAttuale;
     unique_lock<std::mutex> lck(tempo);
     tempoAttuale=tim->getTimeInMin();
+
+    
+
+
     #ifdef DEBUG_MODE
     cout<<"[STRATEGIA -] tempo Attuale "<< tempoAttuale<<" ultima misurazione "<<tempoUltimaMisurazione<<endl;
     #endif
@@ -348,6 +375,7 @@ void* gestioneTempo(void* args){
     int giorno=tim->getDay();
     if(giorno!=giornoAttuale){
         giornoAttuale=giorno;
+        energiaDomani=energiaPrevistaDomani;
     }
   
     #ifdef VIRTUALE

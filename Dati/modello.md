@@ -6,10 +6,10 @@ $$
 \left\{
 \begin{aligned}
 & \text{Max} \{P_i\} \\
-& E_P(t_n+1)-P_i*F+gap+E(t_n)>0 \\
-& SoC=\frac{E_(t_n)}{E_{max}}> c \\
-& E_C(t_n) =\int_{n-1}^n{P_{out}dt} \\
-& E_A(t_n) =\int_{n-1}^n{P_{in}dt} \\
+& E_P(t_n,f)-P_i*f+E(t_n)>c \\
+& c=E(t_{n})-P_0*\tau \\
+& zE(t{n}) - c >0 \\
+& SoC(t_n)=\frac{E_(t_n)}{E_{max}}> 0 \\
 & E(t_n) =\int_{0}^n{(\eta-k)P_{in}dt} \\
 \end{aligned}
 \right.
@@ -17,23 +17,33 @@ $$
 
 con
 
+$$
+z=
+\left\{
+    \begin{aligned}
+    & 1 \text{ se } \frac{E_d}{E_{max}} > 1 \\
+    & \frac{E_d}{E_{max}} \text{      altrimenti} 
+    \end{aligned}
+\right.
+$$
 
-$\eta$ e $k$  costanti
+$z$ : lo utilizzo per capire se il giorno dopo ci sarà abbastanza energia per ricaricare tutta la batteria o in che proporzione ci sarà
 
-$c$ = percentuale minima di batteria oltre la quale non andare
+$E_d$ : energia prevista per il giorno successivo
 
-$F$ = finestra temporale di controllo/monitoraggio della strategia
+$\eta$ e $k$  costanti che rappresentano efficienza e perdite rispettivamente
 
-$P_{in}$ = Potenza in ingresso
+$c$ : valore di energia minimo necessario per arrivare al giorno dopo con la configurazion $0$
 
-$P_{out}$ = Potenza in uscita
+$\tau$ = tempo che manca al primo momento in cui ci sarà di nuovo energia il giorno dopo.
 
-$E_A(t_n)$ = Energia accumulata tra il tempo $t_{n-1}$ e $t_{n}$
 
-$E_C(t_n)$ = Energia consumata tra il tempo $t_{n-1}$ e $t_{n}$, vaore utilizzato in $gap$, da capire come
+$f$ = finestra temporale di previsione e controllo/monitoraggio della strategia
+
+$P_{i}$ = Potenza utilizzata dalla configurazione $i$
 
 $E_(t_n)$ = energia nella batteria al tempo $t_n$
 
-$SoC$ = percentuale batteria al tempo $t_n$
+$SoC(t_n)$ = percentuale batteria al tempo $t_n$
 
 
