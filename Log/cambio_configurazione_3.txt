@@ -1,0 +1,4 @@
+[ LOG ] CFG 3 - scelta configurazione 3 
+[ TEMPO ]0.000114
+[ LOG ] CFG 3 - scelta configurazione 3 
+[ TEMPO ]0.000047

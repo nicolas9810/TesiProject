@@ -1,0 +1,8 @@
+[ LOG ]CFG 1 - scelta configurazione 1 
+[ TEMPO ]0.000163
+[ LOG ]CFG 1 - scelta configurazione 1 
+[ TEMPO ]0.000069
+[ LOG ]CFG 1 - scelta configurazione 1 
+[ TEMPO ]0.000048
+[ LOG ]CFG 1 - scelta configurazione 1 
+[ TEMPO ]0.000192

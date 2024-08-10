@@ -1,0 +1,6 @@
+[ LOG ] CFG 0 - spengo il sistema 
+[ TEMPO ]0.000470
+[ LOG ] CFG 0 - spengo il sistema 
+[ TEMPO ]0.000186
+[ LOG ] CFG 0 - spengo il sistema 
+[ TEMPO ]0.000276

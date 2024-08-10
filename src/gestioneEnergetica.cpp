@@ -17,6 +17,10 @@
 #include <pthread.h>
 #include "previsione.h"
 #include "batteria.h"
+
+#include <fstream>
+#include <filesystem>  // Per creare la cartella Log
+
 /*
 TODO 
 Provare a inserire la strategia direttamente qui per vedere se riesco a prendere il tempo
@@ -70,6 +74,19 @@ Batteria *batteria;
 string cfgfilename = "../cfg/fmxcku115r1_1.cfg";
 //string comandoUp ="profpga_run "+cfgfilename+" --up";
 // string comandoDown ="profpga_run "+cfgfilename+" --down";
+
+chrono::time_point<std::chrono::high_resolution_clock> inizio;
+chrono::time_point<std::chrono::high_resolution_clock> fine;
+
+void startTimer() {
+    inizio = std::chrono::high_resolution_clock::now();
+}
+
+double getElapsedTime() {
+    fine = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = fine - inizio;
+    return elapsed.count();
+}
 
 
 
@@ -138,19 +155,24 @@ void inizializzazione(){
     tempoUltimaMisurazione=tim->getTimeInMin();
     //Batteria ( Energia Max, efficienza, coef di peridite, limite di scaricamento, finestra di predizione)
     batteria=new Batteria(ENMAX,EFFICIENCY,LOSS,MINIMUMCHARGE,FINESTRAPREDIZIONE);
+    batteria->setEnergia(600);
    
-    //straGreedy=StrategiaGreedy(device);
-    //straGreedyPredizione=StrategiaGreedyPredizione(device,tim);
-    // =StrategiaPredizioneSimul(device);
-    //straVirtualePredizione=StrategiaVirtualePredizione(device,&tim);
-    //straVirtuale=StrategiaVirtuale(device,tim);
-
-    //currentStrategy=&straVirtuale;
-    //string comand="/home/nicolas/Codice/TesiProject/prova";
-    //int exitcode = system(comand.c_str());
-    
 
 }
+
+
+void writeLog(const std::string& filename, const std::string& message) {
+    std::string filePath = "../Log/" + filename;
+    std::ofstream logFile;
+    logFile.open(filePath, std::ios_base::app); // Apri il file in modalità append
+    if (logFile.is_open()) {
+        logFile << message << std::endl;
+        logFile.close();
+    } else {
+        std::cerr << "Unable to open log file" << std::endl;
+    }
+}
+
 
 float getBatteryCharge(){
     return 90;//device->getBatterySOC();
@@ -344,6 +366,7 @@ int strategia(){
     cout<<"[STRATEGIA -] energiaPrevista "<< EnergiaPrevista<<"\n";
     #endif
     }
+    
     int cfg= configurazione();
     tempoUltimaMisurazione=tim->getTimeInMin();
     
@@ -362,7 +385,8 @@ void gestioneStrategia(){
     float batteryStatus;
     //currentStrategy->setConsumi(configurazione);
     configurazione=strategia();
-    if (configurazione!=configurazioneAttuale){   
+    if (configurazione!=configurazioneAttuale){ 
+        startTimer();  
         #ifdef DEBUG_MODE
         cout<<"[GESTIONE STRATEGIA ] Nuova configurazione scelta, attuale = "<<configurazioneAttuale<<", nuova= "<<configurazione<<endl;
         #endif
@@ -433,6 +457,8 @@ void* gestioneTempo(void* args){
         int exitcode;
         string comandoDown;
         string comandoUp;
+        string logFile;
+        string msg;
         switch (configurazioneAttuale)
         {
         case 0:
@@ -440,6 +466,8 @@ void* gestioneTempo(void* args){
             cout<<"[MAIN - ROUT conf 0] "<<interrupt<<endl;
             #endif
             off=true;
+            logFile="cambio_configurazione_0.txt";
+            msg="[ LOG ] CFG 0 - spengo il sistema ";
             comandoDown ="profpga_run "+cfgfilename+" --down";
             //exitcode = system(comandoDown.c_str());
             #ifdef DEBUG_MODE
@@ -450,6 +478,8 @@ void* gestioneTempo(void* args){
         #ifdef DEBUG_MODE
             cout<<"[MAIN - ROUT conf 1] "<<interrupt<<endl;
             #endif
+            logFile="cambio_configurazione_1.txt";
+             msg="[ LOG ]CFG 1 - scelta configurazione 1 ";
             off=false;
             cfgfilename = "../cfg/fmxcku115r1_1.cfg";
             comandoUp ="profpga_run "+cfgfilename+" --up";
@@ -464,6 +494,8 @@ void* gestioneTempo(void* args){
             cout<<"[MAIN - ROUT conf 2] "<<interrupt<<endl;
             #endif
             off=false;
+             logFile="cambio_configurazione_2.txt";
+             msg="[ LOG ] CFG 2 - scelta configurazione 2 ";
             cfgfilename = "../cfg/fmxcku115r1_2.cfg";
             #ifdef DEBUG_MODE
             cout<<"[MAIN - ROUT conf 2] "<<cfgfilename<<endl;
@@ -477,6 +509,8 @@ void* gestioneTempo(void* args){
             cout<<"[MAIN - ROUT conf 3] "<<interrupt<<endl;
             #endif
             off=false;
+             logFile="cambio_configurazione_3.txt";
+             msg="[ LOG ] CFG 3 - scelta configurazione 3 ";
             cfgfilename = "../cfg/fmxcku115r1_3.cfg";
             #ifdef DEBUG_MODE
             cout<<"[MAIN - ROUT conf 3] "<<cfgfilename<<endl;
@@ -495,7 +529,10 @@ void* gestioneTempo(void* args){
             
             break;
         }
-        
+        double elapsed=getElapsedTime();
+        writeLog(logFile,msg);
+        string tempo = "[ TEMPO ]" + to_string(elapsed);
+        writeLog(logFile,tempo);
 
         interrupt=-1;
 
