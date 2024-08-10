@@ -86,7 +86,7 @@ float Batteria:: getCoefPerdite()
     return k;
 }
 
-int Batteria::SoC(){
+float Batteria::SoC(){
         return (E/Emax)*100;
 }
 
@@ -114,7 +114,9 @@ float Batteria::discharge(float potenza,int tempo)
     return E;
 }
 float Batteria::chargeDischarge(){
+    #ifdef DEBUG_MODE
     std::cout<<"[BATTERIA - pre] Energia ="<< E<<std::endl;
+    #endif
     E+=Ea*(eta-k);
     E-=Ec;
     if(E>Emax){
@@ -122,7 +124,9 @@ float Batteria::chargeDischarge(){
     }else if(E<0){
         E=0;
     }
+    #ifdef DEBUG_MODE
     std::cout<<"[BATTERIA - post] Energia ="<< E<<std::endl;
+    #endif
 
     return E;
 }

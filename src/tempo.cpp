@@ -26,36 +26,36 @@ Tempo& Tempo::operator=(Tempo&& other) noexcept {
 
 
 
-void Tempo::lock_read() {
-    std::unique_lock<std::mutex> lock(mutex_);
-    read_cv_.wait(lock, [this]() { return writer_count_ == 0; });
-    ++reader_count_;
-}
+// void Tempo::lock_read() {
+//     std::unique_lock<std::mutex> lock(mutex_);
+//     read_cv_.wait(lock, [this]() { return writer_count_ == 0; });
+//     ++reader_count_;
+// }
 
-void Tempo::unlock_read() {
-    std::lock_guard<std::mutex> lock(mutex_);
-    if (--reader_count_ == 0) {
-        write_cv_.notify_one();
-    }
-}
+// void Tempo::unlock_read() {
+//     std::lock_guard<std::mutex> lock(mutex_);
+//     if (--reader_count_ == 0) {
+//         write_cv_.notify_one();
+//     }
+// }
 
-void Tempo::lock_write() {
-    std::unique_lock<std::mutex> lock(mutex_);
-    ++writer_count_;
-    write_cv_.wait(lock, [this]() { return reader_count_ == 0 & !writing_; ; });
-    writing_ = true;
-}
+// void Tempo::lock_write() {
+//     std::unique_lock<std::mutex> lock(mutex_);
+//     ++writer_count_;
+//     write_cv_.wait(lock, [this]() { return reader_count_ == 0 & !writing_; ; });
+//     writing_ = true;
+// }
 
-void Tempo::unlock_write() {
-    std::lock_guard<std::mutex> lock(mutex_);
-    writing_ = false;
-    --writer_count_;
-    if (writer_count_ == 0) {
-        read_cv_.notify_all();
-    } else {
-        write_cv_.notify_one();
-    }
-}
+// void Tempo::unlock_write() {
+//     std::lock_guard<std::mutex> lock(mutex_);
+//     writing_ = false;
+//     --writer_count_;
+//     if (writer_count_ == 0) {
+//         read_cv_.notify_all();
+//     } else {
+//         write_cv_.notify_one();
+//     }
+// }
 
 // Getter
 int Tempo::getSeconds() {

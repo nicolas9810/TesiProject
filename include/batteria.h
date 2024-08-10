@@ -1,4 +1,6 @@
-
+#ifndef BATTERIA_H
+#define BATTERIA_H
+#include "defines.h"
 class Batteria{
     private:
 
@@ -44,7 +46,7 @@ class Batteria{
     float getEfficienza();
     float getCoefPerdite();
 
-    int SoC();
+    float SoC();
 
     float charge(float p, int time);
     float discharge(float p,int time);
@@ -59,3 +61,4 @@ class Batteria{
 
 
 };  
+#endif //BATTERIA_H
