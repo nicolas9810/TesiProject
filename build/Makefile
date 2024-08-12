@@ -153,6 +153,30 @@ src/GreenPlantModel.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/gestioneEnergetica.dir/build.make CMakeFiles/gestioneEnergetica.dir/src/GreenPlantModel.cpp.s
 .PHONY : src/GreenPlantModel.cpp.s
 
+src/Modello.o: src/Modello.cpp.o
+.PHONY : src/Modello.o
+
+# target to build an object file
+src/Modello.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gestioneEnergetica.dir/build.make CMakeFiles/gestioneEnergetica.dir/src/Modello.cpp.o
+.PHONY : src/Modello.cpp.o
+
+src/Modello.i: src/Modello.cpp.i
+.PHONY : src/Modello.i
+
+# target to preprocess a source file
+src/Modello.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gestioneEnergetica.dir/build.make CMakeFiles/gestioneEnergetica.dir/src/Modello.cpp.i
+.PHONY : src/Modello.cpp.i
+
+src/Modello.s: src/Modello.cpp.s
+.PHONY : src/Modello.s
+
+# target to generate assembly for a file
+src/Modello.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/gestioneEnergetica.dir/build.make CMakeFiles/gestioneEnergetica.dir/src/Modello.cpp.s
+.PHONY : src/Modello.cpp.s
+
 src/batteria.o: src/batteria.cpp.o
 .PHONY : src/batteria.o
 
@@ -429,6 +453,9 @@ help:
 	@echo "... src/GreenPlantModel.o"
 	@echo "... src/GreenPlantModel.i"
 	@echo "... src/GreenPlantModel.s"
+	@echo "... src/Modello.o"
+	@echo "... src/Modello.i"
+	@echo "... src/Modello.s"
 	@echo "... src/batteria.o"
 	@echo "... src/batteria.i"
 	@echo "... src/batteria.s"

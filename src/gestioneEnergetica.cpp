@@ -17,6 +17,7 @@
 #include <pthread.h>
 #include "previsione.h"
 #include "batteria.h"
+#include "Modello.h"
 /*
 TODO 
 Provare a inserire la strategia direttamente qui per vedere se riesco a prendere il tempo
@@ -64,8 +65,15 @@ int slotAttuale;
 float EnergiaPrevista;
 float EnergiaEffettivaAccumulata;
 float gap;
-GreenPlantModel *modelloPannello;
+// GreenPlantModel *modelloPannello;
+Modello *modelloPannello;
+
 Batteria *batteria;
+
+float arraytempo []= { 0, 0, 0, 0, 0, 0, 40, 0, 100, 0, 0, 100, 12, 150, 0, 74, 0, 100, 20, 0, 0, 0, 0, 0, 0, 0, 0,
+                         0, 0, 0, 7, 163, 110, 468, 595, 471, 386, 635, 523, 89, 321, 55, 7, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 7, 22, 44, 65, 372, 390, 327, 529, 789, 620, 415, 195, 21, 0, 0, 0, 0, 0
+                    } ;
 
 string cfgfilename = "../cfg/fmxcku115r1_1.cfg";
 //string comandoUp ="profpga_run "+cfgfilename+" --up";
@@ -129,16 +137,19 @@ void inizializzazione(){
     for(int i=0;i<INTERRUPTS;i++){
         interrupt[i]=-1;
     }
-    modelloPannello=new GreenPlantModel("../csv/2018.csv");
+    // modelloPannello=new GreenPlantModel("../csv/2018.csv");
+
+    modelloPannello=new Modello();
+    modelloPannello->setPrevisioni(arraytempo,72);
+
     // pthread_setname_np(pthread_self(), "Main Thread");
     //creazione della strategia
-    tim=new Tempo(90,0,0,0);
-    giornoAttuale=90;
+    tim=new Tempo(0,0,0,0);
+    giornoAttuale=0;
     //tempo=Tempo();
     tempoUltimaMisurazione=tim->getTimeInMin();
     //Batteria ( Energia Max, efficienza, coef di peridite, limite di scaricamento, finestra di predizione)
     batteria=new Batteria(ENMAX,EFFICIENCY,LOSS,MINIMUMCHARGE,FINESTRAPREDIZIONE);
-   
     //straGreedy=StrategiaGreedy(device);
     //straGreedyPredizione=StrategiaGreedyPredizione(device,tim);
     // =StrategiaPredizioneSimul(device);
@@ -162,10 +173,12 @@ float misuraPotenza(){
 float previsione(int t){
     
     //ritornare energia nella finestra di tempo successiva con una percentaule di errore del 20/15%*/
-    double delta_t=1.0/60.0;
+    float delta_t=1.0/60.0;
     float energiaInArrivo=0;
     for(int i= t;i< t+FINESTRA;i++){
         energiaInArrivo+= modelloPannello->getProducedPowerByTime(i)*delta_t;
+        if(modelloPannello->getProducedPowerByTime(i)*delta_t>0){
+        }
     }
     float erroreRandom= static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
     

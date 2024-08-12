@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/gestioneEnergetica.dir/src/GreenPlantModel.cpp.o"
   "CMakeFiles/gestioneEnergetica.dir/src/GreenPlantModel.cpp.o.d"
+  "CMakeFiles/gestioneEnergetica.dir/src/Modello.cpp.o"
+  "CMakeFiles/gestioneEnergetica.dir/src/Modello.cpp.o.d"
   "CMakeFiles/gestioneEnergetica.dir/src/batteria.cpp.o"
   "CMakeFiles/gestioneEnergetica.dir/src/batteria.cpp.o.d"
   "CMakeFiles/gestioneEnergetica.dir/src/epever.cpp.o"
