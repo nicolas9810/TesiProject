@@ -539,7 +539,7 @@ void* gestioneTempo(void* args){
             
             break;
         }
-
+        startTimer(iniziocfg);
         double elapsed=getElapsedTime(fine);
         writeLog(logFile,msg);
         string tempo = "[ TEMPO ]" + to_string(elapsed);
