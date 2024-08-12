@@ -98,6 +98,17 @@ double getElapsedTime(chrono::time_point<std::chrono::high_resolution_clock> &fi
     return elapsed.count();
 }
 
+void writeLog(const std::string& filename, const std::string& message) {
+    std::string filePath = "../Log/" + filename;
+    std::ofstream logFile;
+    logFile.open(filePath, std::ios_base::app); // Apri il file in modalità append
+    if (logFile.is_open()) {
+        logFile << message << std::endl;
+        logFile.close();
+    } else {
+        std::cerr << "Unable to open log file" << std::endl;
+    }
+}
 
 class CodaCircolare{
     private:
