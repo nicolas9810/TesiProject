@@ -70,9 +70,9 @@ Modello *modelloPannello;
 
 Batteria *batteria;
 
-float arraytempo []= { 0, 0, 0, 0, 0, 0, 40, 0, 100, 0, 0, 100, 12, 150, 0, 74, 0, 100, 20, 0, 0, 0, 0, 0, 
-                        0, 0, 0, 0, 0, 0, 7, 163, 110, 468, 595, 471, 386, 635, 523, 89, 321, 55, 7, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 7, 22, 44, 65, 372, 390, 327, 529, 789, 620, 415, 195, 21, 0, 0, 0, 0, 0
+float arraytempo []= {  0, 0, 0, 0, 0, 0, 7, 163, 110, 468, 595, 471, 386, 635, 523, 89, 321, 55, 7, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 7, 22, 44, 65, 372, 390, 327, 529, 789, 620, 415, 195, 21, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 106, 331, 561, 763, 907, 996, 1013, 960, 836, 662, 446, 214, 28, 0, 0, 0, 0, 0
                     } ;
 
 string cfgfilename = "../cfg/fmxcku115r1_1.cfg";
@@ -177,9 +177,7 @@ float previsione(int t){
     float energiaInArrivo=0;
     for(int i= t;i< t+FINESTRA;i++){
         energiaInArrivo+= modelloPannello->getProducedPowerByTime(i)*delta_t;
-        if(modelloPannello->getProducedPowerByTime(i)*delta_t>0){
-        }
-    }
+          }
     float erroreRandom= static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
     
     // Scala il valore nel range -0.20 a 0.20
