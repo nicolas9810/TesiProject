@@ -94,7 +94,7 @@ void startTimer(chrono::time_point<std::chrono::high_resolution_clock> &inizio) 
     inizio = std::chrono::high_resolution_clock::now();
 }
 
-double getElapsedTime(chrono::time_point<std::chrono::high_resolution_clock> &fine) {
+double getElapsedTime(chrono::time_point<std::chrono::high_resolution_clock> &fine,chrono::time_point<std::chrono::high_resolution_clock> &inizio) {
     fine = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = fine - inizio;
     return elapsed.count();
@@ -460,7 +460,7 @@ void* gestioneTempo(void* args){
         #ifdef DEBUG_MODE
         cout<<"[MAIN - ROUT Cambio cfg] "<<interrupt<<endl;
         #endif
-        double finetempo = getElapsedTime(finecfg);
+        double finetempo = getElapsedTime(finecfg,iniziocfg);
         tempiConfig[configurazioneAttuale]+=finetempo;
         configurazioneAttuale=interrupt;
         int exitcode;
@@ -540,9 +540,9 @@ void* gestioneTempo(void* args){
             break;
         }
         startTimer(iniziocfg);
-        double elapsed=getElapsedTime(fine);
+        double elapsed=getElapsedTime(fine,inizio);
         writeLog(logFile,msg);
-        string tempo = "[ TEMPO ]" + to_string(elapsed);
+        string tempo = "[ TEMPO ] " + to_string(elapsed);
         writeLog(logFile,tempo);
 
         interrupt=-1;
