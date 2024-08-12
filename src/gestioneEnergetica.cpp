@@ -70,8 +70,8 @@ Modello *modelloPannello;
 
 Batteria *batteria;
 
-float arraytempo []= { 0, 0, 0, 0, 0, 0, 40, 0, 100, 0, 0, 100, 12, 150, 0, 74, 0, 100, 20, 0, 0, 0, 0, 0, 0, 0, 0,
-                         0, 0, 0, 7, 163, 110, 468, 595, 471, 386, 635, 523, 89, 321, 55, 7, 0, 0, 0, 0, 0,
+float arraytempo []= { 0, 0, 0, 0, 0, 0, 40, 0, 100, 0, 0, 100, 12, 150, 0, 74, 0, 100, 20, 0, 0, 0, 0, 0, 
+                        0, 0, 0, 0, 0, 0, 7, 163, 110, 468, 595, 471, 386, 635, 523, 89, 321, 55, 7, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 7, 22, 44, 65, 372, 390, 327, 529, 789, 620, 415, 195, 21, 0, 0, 0, 0, 0
                     } ;
 
@@ -233,14 +233,13 @@ int configurazione(){
     }
     float E_p= previsione(t_n);
     float E_batteria=batteria->getEnergia();
-    int cfg=0;
-    int i=3;
     bool flag=false;
     #ifdef DEBUG_MODE
     cout<<"[CONFIG] energia prevista ="<< E_p<<endl;
     cout<<"[CONFIG] energia batteria ="<< E_batteria<<endl;
     #endif
-    while(i>0 && !flag){
+    // while(i>0 && !flag){
+    for(int i=3;i>0;i--){
         float E_consumo=consumi[i]*FINESTRA/60;
         bool cond1= E_p-E_consumo+E_batteria>0;
         // #ifdef DEBUG_MODE
@@ -252,19 +251,26 @@ int configurazione(){
         #endif
             bool cond2= E_p > consumi[0]*FINESTRA/60;
             if(cond2){
-                flag =true;
-                cfg=i;
+                #ifdef DEBUG_MODE
+                cout<<"[CONFIG] scelta cfg "<<i<<endl;
+                #endif
+                return i;
             }
             else{
                 int t_s = findts();
                 float E_t=E_batteria;
                 bool flag2 = true;
-                int t=t_n;
-                while( flag2 && t<t_n+FINESTRA ){
-                    //sommo l'energia in ingresso minuto per minuto
-                    double delta_t=1.0/60.0;
+                double delta_t=1.0/60.0;
+                for(int t=t_n;t<t_s;t++){
                     float E_in = (modelloPannello->getProducedPowerByTime(t))*delta_t;
-                    float E_out = consumi[i]*delta_t;
+                    float E_out;
+                    if(t<t_n+FINESTRA){
+                        E_out = consumi[i]*delta_t;
+                    }
+                    else{
+                        E_out = consumi[0]*delta_t;
+
+                    }
                     E_t= E_t + E_in - E_out;
                     bool cond3= E_t>0;
                     if(!cond3){
@@ -272,40 +278,22 @@ int configurazione(){
                         #ifdef DEBUG_MODE
                         cout<<"[CONFIG] cond3 at tempo t < t_n+f "<< t <<" NON SODDISFATTA "<<endl;
                         #endif
-                    }
-                    else{
-                        t++;
-                    }
-                }
-                while( flag2 && t<t_s ){
-                    //sommo l'energia in ingresso minuto per minuto
-                    double delta_t=1.0/60.0;
-                    float E_in = (modelloPannello->getProducedPowerByTime(t))*delta_t;
-                    float E_out = consumi[0]*delta_t;
-                    E_t= E_t + E_in - E_out;
-                    bool cond3= E_t>0;
-                    if(!cond3){
-                        flag2 = false;
-                        #ifdef DEBUG_MODE
-                        cout<<"[CONFIG] cond3 at tempo t > t_n+f "<< t <<" NON SODDISFATTA "<<endl;
-                        #endif
-                    }
-                    else{
-                        t++;
+                        break;
                     }
                 }
                 if(flag2){
-                    flag=true;
-                    cfg=i;
+                     #ifdef DEBUG_MODE
+                    cout<<"[CONFIG] scelta cfg "<<i<<endl;
+                    #endif
+                    return i;
                 }
             }
         }
-        i--;
     }
     #ifdef DEBUG_MODE
-    cout<<"[CONFIG] scelta cfg "<<cfg<<endl;
+    cout<<"[CONFIG] scelta cfg "<<0<<endl;
     #endif
-    return cfg;
+    return 0;
 }
 float consumo(int t){
     return batteria->energiaConsumata(consumi[configurazioneAttuale],(t-tempoUltimaMisurazione));
