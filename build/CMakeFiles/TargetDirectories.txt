@@ -1,3 +1,0 @@
-/home/nicolas/Polimi/Tesi/Codice/build/CMakeFiles/gestioneEnergetica.dir
-/home/nicolas/Polimi/Tesi/Codice/build/CMakeFiles/edit_cache.dir
-/home/nicolas/Polimi/Tesi/Codice/build/CMakeFiles/rebuild_cache.dir

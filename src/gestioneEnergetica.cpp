@@ -21,6 +21,7 @@
 #include <fstream>
 #include <filesystem>  // Per creare la cartella Log
 
+#include "Modello.h"
 /*
 TODO 
 Provare a inserire la strategia direttamente qui per vedere se riesco a prendere il tempo
@@ -68,8 +69,15 @@ int slotAttuale;
 float EnergiaPrevista;
 float EnergiaEffettivaAccumulata;
 float gap;
-GreenPlantModel *modelloPannello;
+// GreenPlantModel *modelloPannello;
+Modello *modelloPannello;
+
 Batteria *batteria;
+
+float arraytempo []= {  0, 0, 0, 0, 0, 0, 7, 163, 110, 468, 595, 471, 386, 635, 523, 89, 321, 55, 7, 0, 0, 0, 0, 0, 
+                        0, 0, 0, 0, 0, 0, 7, 22, 44, 65, 372, 390, 327, 529, 789, 620, 415, 195, 21, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 106, 331, 561, 763, 907, 996, 1013, 960, 836, 662, 446, 214, 28, 0, 0, 0, 0, 0,
+                    } ;
 
 string cfgfilename = "../cfg/fmxcku115r1_1.cfg";
 //string comandoUp ="profpga_run "+cfgfilename+" --up";
@@ -78,17 +86,22 @@ string cfgfilename = "../cfg/fmxcku115r1_1.cfg";
 chrono::time_point<std::chrono::high_resolution_clock> inizio;
 chrono::time_point<std::chrono::high_resolution_clock> fine;
 
-void startTimer() {
+chrono::time_point<std::chrono::high_resolution_clock> iniziocfg;
+chrono::time_point<std::chrono::high_resolution_clock> finecfg;
+
+
+void startTimer(chrono::time_point<std::chrono::high_resolution_clock> &inizio) {
     inizio = std::chrono::high_resolution_clock::now();
 }
 
-double getElapsedTime() {
+double getElapsedTime(chrono::time_point<std::chrono::high_resolution_clock> &fine) {
     fine = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = fine - inizio;
     return elapsed.count();
 }
 
 
+int tempiConfig [4];
 
 
 
@@ -146,12 +159,16 @@ void inizializzazione(){
     for(int i=0;i<INTERRUPTS;i++){
         interrupt[i]=-1;
     }
-    modelloPannello=new GreenPlantModel("../csv/2018.csv");
+    // modelloPannello=new GreenPlantModel("../csv/2018.csv");
+
+    modelloPannello=new Modello();
+    modelloPannello->setPrevisioni(arraytempo,72);
+
     // pthread_setname_np(pthread_self(), "Main Thread");
     //creazione della strategia
-    tim=new Tempo(90,0,0,0);
-    giornoAttuale=90;
-    //tempo=Tempo();
+    tim=new Tempo(0,0,0,0);
+    giornoAttuale=0;
+    configurazioneAttuale=0;
     tempoUltimaMisurazione=tim->getTimeInMin();
     //Batteria ( Energia Max, efficienza, coef di peridite, limite di scaricamento, finestra di predizione)
     batteria=new Batteria(ENMAX,EFFICIENCY,LOSS,MINIMUMCHARGE,FINESTRAPREDIZIONE);
@@ -184,10 +201,12 @@ float misuraPotenza(){
 float previsione(int t){
     
     //ritornare energia nella finestra di tempo successiva con una percentaule di errore del 20/15%*/
-    double delta_t=1.0/60.0;
+    float delta_t=1.0/60.0;
     float energiaInArrivo=0;
     for(int i= t;i< t+FINESTRA;i++){
         energiaInArrivo+= modelloPannello->getProducedPowerByTime(i)*delta_t;
+        if(modelloPannello->getProducedPowerByTime(i)*delta_t>0){
+        }
     }
     float erroreRandom= static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
     
@@ -214,7 +233,7 @@ float consumi[]={40,89,120,150};
 int findts(){
     int t_s=0;
     {
-    unique_lock<std::mutex> lck(tempo);
+    //unique_lock<std::mutex> lck(tempo);
     t_s=tim->getTimeInMin()+FINESTRA;
     }
     int incr=0;
@@ -237,19 +256,18 @@ int findts(){
 int configurazione(){
     int t_n=0;
     {
-    unique_lock<std::mutex> lck(tempo);
+    //unique_lock<std::mutex> lck(tempo);
     t_n=tim->getTimeInMin();
     }
     float E_p= previsione(t_n);
     float E_batteria=batteria->getEnergia();
-    int cfg=0;
-    int i=3;
     bool flag=false;
     #ifdef DEBUG_MODE
     cout<<"[CONFIG] energia prevista ="<< E_p<<endl;
     cout<<"[CONFIG] energia batteria ="<< E_batteria<<endl;
     #endif
-    while(i>0 && !flag){
+    // while(i>0 && !flag){
+    for(int i=3;i>0;i--){
         float E_consumo=consumi[i]*FINESTRA/60;
         bool cond1= E_p-E_consumo+E_batteria>0;
         // #ifdef DEBUG_MODE
@@ -261,19 +279,26 @@ int configurazione(){
         #endif
             bool cond2= E_p > consumi[0]*FINESTRA/60;
             if(cond2){
-                flag =true;
-                cfg=i;
+                #ifdef DEBUG_MODE
+                cout<<"[CONFIG] scelta cfg "<<i<<endl;
+                #endif
+                return i;
             }
             else{
                 int t_s = findts();
                 float E_t=E_batteria;
                 bool flag2 = true;
-                int t=t_n;
-                while( flag2 && t<t_n+FINESTRA ){
-                    //sommo l'energia in ingresso minuto per minuto
-                    double delta_t=1.0/60.0;
+                double delta_t=1.0/60.0;
+                for(int t=t_n;t<t_s;t++){
                     float E_in = (modelloPannello->getProducedPowerByTime(t))*delta_t;
-                    float E_out = consumi[i]*delta_t;
+                    float E_out;
+                    if(t<t_n+FINESTRA){
+                        E_out = consumi[i]*delta_t;
+                    }
+                    else{
+                        E_out = consumi[0]*delta_t;
+
+                    }
                     E_t= E_t + E_in - E_out;
                     bool cond3= E_t>0;
                     if(!cond3){
@@ -281,40 +306,22 @@ int configurazione(){
                         #ifdef DEBUG_MODE
                         cout<<"[CONFIG] cond3 at tempo t < t_n+f "<< t <<" NON SODDISFATTA "<<endl;
                         #endif
-                    }
-                    else{
-                        t++;
-                    }
-                }
-                while( flag2 && t<t_s ){
-                    //sommo l'energia in ingresso minuto per minuto
-                    double delta_t=1.0/60.0;
-                    float E_in = (modelloPannello->getProducedPowerByTime(t))*delta_t;
-                    float E_out = consumi[0]*delta_t;
-                    E_t= E_t + E_in - E_out;
-                    bool cond3= E_t>0;
-                    if(!cond3){
-                        flag2 = false;
-                        #ifdef DEBUG_MODE
-                        cout<<"[CONFIG] cond3 at tempo t > t_n+f "<< t <<" NON SODDISFATTA "<<endl;
-                        #endif
-                    }
-                    else{
-                        t++;
+                        break;
                     }
                 }
                 if(flag2){
-                    flag=true;
-                    cfg=i;
+                     #ifdef DEBUG_MODE
+                    cout<<"[CONFIG] scelta cfg "<<i<<endl;
+                    #endif
+                    return i;
                 }
             }
         }
-        i--;
     }
     #ifdef DEBUG_MODE
-    cout<<"[CONFIG] scelta cfg "<<cfg<<endl;
+    cout<<"[CONFIG] scelta cfg "<<0<<endl;
     #endif
-    return cfg;
+    return 0;
 }
 float consumo(int t){
     return batteria->energiaConsumata(consumi[configurazioneAttuale],(t-tempoUltimaMisurazione));
@@ -340,7 +347,7 @@ int strategia(){
     }
     int tempoAttuale;
     {
-    unique_lock<std::mutex> lck(tempo);
+    //unique_lock<std::mutex> lck(tempo);
     tempoAttuale=tim->getTimeInMin();
     #ifdef DEBUG_MODE
     cout<<"[STRATEGIA -] tempo Attuale "<< tempoAttuale<<" ultima misurazione "<<tempoUltimaMisurazione<<endl;
@@ -386,7 +393,7 @@ void gestioneStrategia(){
     //currentStrategy->setConsumi(configurazione);
     configurazione=strategia();
     if (configurazione!=configurazioneAttuale){ 
-        startTimer();  
+        startTimer(inizio);  
         #ifdef DEBUG_MODE
         cout<<"[GESTIONE STRATEGIA ] Nuova configurazione scelta, attuale = "<<configurazioneAttuale<<", nuova= "<<configurazione<<endl;
         #endif
@@ -421,7 +428,7 @@ void* gestioneTempo(void* args){
     pthread_setname_np(pthread_self(), "Gestione Tempo");
     while(true){
     {
-        unique_lock<std::mutex> lck(tempo);
+        //unique_lock<std::mutex> lck(tempo);
         tim->incrementsMinutes(1);
     }
 
@@ -453,12 +460,15 @@ void* gestioneTempo(void* args){
         #ifdef DEBUG_MODE
         cout<<"[MAIN - ROUT Cambio cfg] "<<interrupt<<endl;
         #endif
+        double finetempo = getElapsedTime(finecfg);
+        tempiConfig[configurazioneAttuale]+=finetempo;
         configurazioneAttuale=interrupt;
         int exitcode;
         string comandoDown;
         string comandoUp;
         string logFile;
         string msg;
+
         switch (configurazioneAttuale)
         {
         case 0:
@@ -529,7 +539,8 @@ void* gestioneTempo(void* args){
             
             break;
         }
-        double elapsed=getElapsedTime();
+
+        double elapsed=getElapsedTime(fine);
         writeLog(logFile,msg);
         string tempo = "[ TEMPO ]" + to_string(elapsed);
         writeLog(logFile,tempo);
@@ -584,24 +595,30 @@ int main(){
     #endif
 
     inizializzazione();
-    int result = pthread_create(&normalThread1, nullptr, gestioneTempo, nullptr);
-    if (result != 0) {
-        std::cerr << "Errore nella creazione del thread a priorità normale" << std::endl;
-        return 1;
-    }
+    // int result = pthread_create(&normalThread1, nullptr, gestioneTempo, nullptr);
+    // if (result != 0) {
+    //     std::cerr << "Errore nella creazione del thread a priorità normale" << std::endl;
+    //     return 1;
+    // }
     #ifdef DEBUG_MODE
     cout<<"[MAIN] creo thread che gestisce l'host"<<endl;
     #endif
+
+    startTimer(iniziocfg);
 
     EnergiaPrevista=modelloPannello->getProducedPowerByTime(tim->getTimeInMin())*FINESTRAPREDIZIONE/60;
     #ifdef DEBUG_MODE
     cout<<"[MAIN] Predizione iniziale "<< EnergiaPrevista<<endl;
     #endif
+    bool flag=false;
     while(true){
         int tempoAttuale;
         {
-            unique_lock<std::mutex> lck(tempo);
+            //unique_lock<std::mutex> lck(tempo);
             tempoAttuale=tim->getTimeInMin();
+        }
+        if(tempoAttuale>1980){
+            break;
         }
         if(tempoAttuale>=tempoUltimaMisurazione+FINESTRAPREDIZIONE)
         {
@@ -625,6 +642,13 @@ int main(){
             flagInterrupt=false;
         }
     }
+
+     std::string multiLinea = "[CFG 0 tempo : " +to_string(tempiConfig[0]) +"\n" \
+                            "[CFG 1 tempo : " +to_string(tempiConfig[1]) + "\n"\
+                            "[CFG 2 tempo : " +to_string(tempiConfig[2]) + "\n"\
+                            "[CFG 3 tempo : " +to_string(tempiConfig[3]) + "\n";
+
+    writeLog("tempi.cfg",multiLinea);
 
     #ifdef DEBUG_MODE
         cout<<"[MAIN] fine"<<endl;
