@@ -67,6 +67,7 @@ float EnergiaEffettivaAccumulata;
 float gap;
 // GreenPlantModel *modelloPannello;
 Modello *modelloPannello;
+int tempiConfig [4]={0,0,0,0};
 
 Batteria *batteria;
 
@@ -92,7 +93,7 @@ void startTimer(chrono::time_point<std::chrono::high_resolution_clock> &inizio) 
     inizio = std::chrono::high_resolution_clock::now();
 }
 
-double getElapsedTime(chrono::time_point<std::chrono::high_resolution_clock> &fine) {
+double getElapsedTime(chrono::time_point<std::chrono::high_resolution_clock> &fine,chrono::time_point<std::chrono::high_resolution_clock> &inizio) {
     fine = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = fine - inizio;
     return elapsed.count();
@@ -173,21 +174,10 @@ void inizializzazione(){
     //creazione della strategia
     tim=new Tempo(0,0,0,0);
     giornoAttuale=0;
-    //tempo=Tempo();
+    configurazioneAttuale=0;
     tempoUltimaMisurazione=tim->getTimeInMin();
     //Batteria ( Energia Max, efficienza, coef di peridite, limite di scaricamento, finestra di predizione)
     batteria=new Batteria(ENMAX,EFFICIENCY,LOSS,MINIMUMCHARGE,FINESTRAPREDIZIONE);
-    //straGreedy=StrategiaGreedy(device);
-    //straGreedyPredizione=StrategiaGreedyPredizione(device,tim);
-    // =StrategiaPredizioneSimul(device);
-    //straVirtualePredizione=StrategiaVirtualePredizione(device,&tim);
-    //straVirtuale=StrategiaVirtuale(device,tim);
-
-    //currentStrategy=&straVirtuale;
-    //string comand="/home/nicolas/Codice/TesiProject/prova";
-    //int exitcode = system(comand.c_str());
-    
-
 }
 
 float getBatteryCharge(){
@@ -455,6 +445,9 @@ void* gestioneTempo(void* args){
         #ifdef DEBUG_MODE
         cout<<"[MAIN - ROUT Cambio cfg] "<<interrupt<<endl;
         #endif
+
+        double finetempo = getElapsedTime(finecfg,iniziocfg);
+        tempiConfig[configurazioneAttuale]+=finetempo;
         configurazioneAttuale=interrupt;
         int exitcode;
         string comandoDown;
@@ -522,7 +515,7 @@ void* gestioneTempo(void* args){
             break;
         }
         
-
+        startTimer(iniziocfg);
         interrupt=-1;
 
     }
@@ -586,6 +579,7 @@ int main(){
     #ifdef DEBUG_MODE
     cout<<"[MAIN] Predizione iniziale "<< EnergiaPrevista<<endl;
     #endif
+    startTimer(iniziocfg);
     while(true){
         int tempoAttuale;
         {
