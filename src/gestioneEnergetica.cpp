@@ -81,6 +81,22 @@ string cfgfilename = "../cfg/fmxcku115r1_1.cfg";
 
 
 
+chrono::time_point<std::chrono::high_resolution_clock> inizio;
+chrono::time_point<std::chrono::high_resolution_clock> fine;
+
+chrono::time_point<std::chrono::high_resolution_clock> iniziocfg;
+chrono::time_point<std::chrono::high_resolution_clock> finecfg;
+
+
+void startTimer(chrono::time_point<std::chrono::high_resolution_clock> &inizio) {
+    inizio = std::chrono::high_resolution_clock::now();
+}
+
+double getElapsedTime(chrono::time_point<std::chrono::high_resolution_clock> &fine) {
+    fine = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = fine - inizio;
+    return elapsed.count();
+}
 
 
 class CodaCircolare{
