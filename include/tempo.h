@@ -6,8 +6,7 @@
 #include <shared_mutex>
 #include <iostream>
 #include <condition_variable>
-
-
+#include <ctime>
 
 class Tempo {
 private:
@@ -43,6 +42,8 @@ public:
     int getHours();
     int getDay();
     int getTimeInMin();
+    int getTimeInSec();
+
 
     // Incrementatori
     void incrementSeconds(int s);

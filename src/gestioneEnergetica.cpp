@@ -70,7 +70,7 @@ Modello *modelloPannello;
 
 Batteria *batteria;
 
-float arraytempo []= { 0, 0, 0, 0, 0, 0, 40, 0, 100, 0, 0, 100, 12, 150, 0, 74, 0, 100, 20, 0, 0, 0, 0, 0, 
+float arraytempo []= { 100, 120, 100, 80, 150, 0, 40, 123, 100, 145, 0, 100, 12, 150, 0, 74, 0, 100, 20, 0, 0, 0, 0, 0, 
                         0, 0, 0, 0, 0, 0, 7, 163, 110, 468, 595, 471, 386, 635, 523, 89, 321, 55, 7, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 7, 22, 44, 65, 372, 390, 327, 529, 789, 620, 415, 195, 21, 0, 0, 0, 0, 0
                     } ;
@@ -79,7 +79,7 @@ string cfgfilename = "../cfg/fmxcku115r1_1.cfg";
 //string comandoUp ="profpga_run "+cfgfilename+" --up";
 // string comandoDown ="profpga_run "+cfgfilename+" --down";
 
-
+int tempiConfig [4];
 
 
 
@@ -205,7 +205,7 @@ float consumi[]={40,89,120,150};
 int findts(){
     int t_s=0;
     {
-    unique_lock<std::mutex> lck(tempo);
+    //unique_lock<std::mutex> lck(tempo);
     t_s=tim->getTimeInMin()+FINESTRA;
     }
     int incr=0;
@@ -228,7 +228,7 @@ int findts(){
 int configurazione(){
     int t_n=0;
     {
-    unique_lock<std::mutex> lck(tempo);
+    //unique_lock<std::mutex> lck(tempo);
     t_n=tim->getTimeInMin();
     }
     float E_p= previsione(t_n);
@@ -319,7 +319,7 @@ int strategia(){
     }
     int tempoAttuale;
     {
-    unique_lock<std::mutex> lck(tempo);
+    //unique_lock<std::mutex> lck(tempo);
     tempoAttuale=tim->getTimeInMin();
     #ifdef DEBUG_MODE
     cout<<"[STRATEGIA -] tempo Attuale "<< tempoAttuale<<" ultima misurazione "<<tempoUltimaMisurazione<<endl;
@@ -398,7 +398,7 @@ void* gestioneTempo(void* args){
     pthread_setname_np(pthread_self(), "Gestione Tempo");
     while(true){
     {
-        unique_lock<std::mutex> lck(tempo);
+        //unique_lock<std::mutex> lck(tempo);
         tim->incrementsMinutes(1);
     }
 
@@ -548,11 +548,11 @@ int main(){
     #endif
 
     inizializzazione();
-    int result = pthread_create(&normalThread1, nullptr, gestioneTempo, nullptr);
-    if (result != 0) {
-        std::cerr << "Errore nella creazione del thread a priorità normale" << std::endl;
-        return 1;
-    }
+    // int result = pthread_create(&normalThread1, nullptr, gestioneTempo, nullptr);
+    // if (result != 0) {
+    //     std::cerr << "Errore nella creazione del thread a priorità normale" << std::endl;
+    //     return 1;
+    // }
     #ifdef DEBUG_MODE
     cout<<"[MAIN] creo thread che gestisce l'host"<<endl;
     #endif
@@ -564,7 +564,7 @@ int main(){
     while(true){
         int tempoAttuale;
         {
-            unique_lock<std::mutex> lck(tempo);
+            //unique_lock<std::mutex> lck(tempo);
             tempoAttuale=tim->getTimeInMin();
         }
         if(tempoAttuale>=tempoUltimaMisurazione+FINESTRAPREDIZIONE)

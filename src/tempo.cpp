@@ -1,10 +1,23 @@
 #include "tempo.h"
 
 // Costruttore di default
-Tempo::Tempo() : sec(0), min(0), hour(0), day(0) {}
+Tempo::Tempo() : sec(0), min(0), hour(0), day(0) {
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+    std::tm* now_tm = std::localtime(&now_time);
+    hour = now_tm->tm_hour;
+    day = now_tm->tm_mday;
+}
+
 
 // Costruttore con parametri
-Tempo::Tempo(int d, int h, int m, int s) : day(d), hour(h), min(m), sec(s) {}
+Tempo::Tempo(int d, int h, int m, int s) : day(d), hour(h), min(m), sec(s) {
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+    std::tm* now_tm = std::localtime(&now_time);
+    hour = now_tm->tm_hour;
+    day = now_tm->tm_mday;
+}
 
 // Costruttore di move
 Tempo::Tempo(Tempo&& other) noexcept : sec(other.sec), min(other.min), hour(other.hour), day(other.day) {
@@ -59,47 +72,99 @@ Tempo& Tempo::operator=(Tempo&& other) noexcept {
 
 // Getter
 int Tempo::getSeconds() {
-    //lock_read();
-    int s= sec;
-    //unck_read();
-    return s;
+     auto now = std::chrono::system_clock::now();
+
+    // Converti il time_point in un time_t che rappresenta il tempo in secondi dal 1970-01-01 00:00:00 UTC
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+
+    // Converte time_t in una struttura tm leggibile
+    std::tm* now_tm = std::localtime(&now_time);
+
+    // Estrai l'ora e il minuto corrente come interi
+    int current_sec = now_tm->tm_sec;
+
+    return current_sec;
 }
 
 int Tempo::getMinutes() {
-    //lock_read();
-    int m=min;
-    //unck_read();
-    return m;
+    
+
+
+    auto now = std::chrono::system_clock::now();
+
+    // Converti il time_point in un time_t che rappresenta il tempo in secondi dal 1970-01-01 00:00:00 UTC
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+
+    // Converte time_t in una struttura tm leggibile
+    std::tm* now_tm = std::localtime(&now_time);
+
+    // Estrai l'ora e il minuto corrente come interi
+    int current_minute = now_tm->tm_min;
+
+    return current_minute;
 }
 
 int Tempo::getHours() {
-    //lock_read();
-    int h= hour;
-    //unck_read();
-    return h;
+    auto now = std::chrono::system_clock::now();
+
+    // Converti il time_point in un time_t che rappresenta il tempo in secondi dal 1970-01-01 00:00:00 UTC
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+
+    // Converte time_t in una struttura tm leggibile
+    std::tm* now_tm = std::localtime(&now_time);
+
+    // Estrai l'ora e il minuto corrente come interi
+    int current_hour = now_tm->tm_hour;
+
+    current_hour=current_hour-hour;
+    if(current_hour<0){
+        current_hour=24+current_hour;
+    }
+    return current_hour;
 }
 int Tempo::getDay(){
-    //lock_read();
-    int d= day;
-    //unck_read();
-    return d;
+    auto now = std::chrono::system_clock::now();
+
+    // Converti il time_point in un time_t che rappresenta il tempo in secondi dal 1970-01-01 00:00:00 UTC
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+
+    // Converte time_t in una struttura tm leggibile
+    std::tm* now_tm = std::localtime(&now_time);
+
+    // Estrai l'ora e il minuto corrente come interi
+    int current_mday = now_tm->tm_mday;
+
+    return current_mday;
 }
 int Tempo::getTimeInMin(){
-    int m=0;
-    #ifdef VIRTUALE
-    //lock_read();
-    m=getMinutes()+getHours()*60+getDay()*24*60;
-    //unck_read();
-    #endif
-    #ifndef VIRTUALE
-    time_t now = time(0); // get current date and time  
-    tm* ltm = localtime(&now);  
-    int h= ltm->tm_hour;
-    m= ltm->tm_min;
+    // #ifdef VIRTUALE
+    // //lock_read();
+    // m=getMinutes()+getHours()*60+getDay()*24*60;
+    // //unck_read();
+    // #endif
+    // #ifndef VIRTUALE
+    // #endif
+    int h=getHours();
+    int m=getMinutes();
     m=m+h*60;
-    #endif
+    
     return m;
 
+}
+int Tempo::getTimeInSec(){
+    // #ifdef VIRTUALE
+    // //lock_read();
+    // m=getMinutes()+getHours()*60+getDay()*24*60;
+    // //unck_read();
+    // #endif
+    // #ifndef VIRTUALE
+    // #endif
+    int s=getSeconds();
+    int h=getHours();
+    int m=getMinutes();
+    s+=m*60+h*60*60;
+    
+    return s;
 }
 
 // Incrementatori
