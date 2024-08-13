@@ -71,8 +71,9 @@ int tempiConfig [4]={0,0,0,0};
 
 Batteria *batteria;
 
-float arraytempo []= {  0, 0, 0, 0, 0, 0, 7, 46, 46, 46, 76, 66, 86, 86, 86, 86, 51, 55, 7, 0, 0, 0, 0, 0,
-                        0, 0, 0, 0, 0, 0, 7, 22, 44, 65, 372, 390, 327, 529, 789, 620, 415, 195, 21, 0, 0, 0, 0, 0,
+float arraytempo []= {  0, 0, 0, 0, 0, 13, 199, 200, 82, 148, 123, 210, 641, 375, 545, 419, 499, 12, 49, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 20, 94, 87, 59, 447, 550, 99, 409, 477, 474, 705, 501, 287, 94, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 86, 183, 400, 556, 332, 370, 115, 889, 1054, 941, 612, 446, 17, 8, 0, 0, 0, 0, 0,
                         0, 0, 0, 0, 0, 0, 106, 331, 561, 763, 907, 996, 1013, 960, 836, 662, 446, 214, 28, 0, 0, 0, 0, 0
                     } ;
 
@@ -382,6 +383,7 @@ int strategia(){
     cout<<"[ STRATEGIA -] BATTERIA ALLO "<<soc<<"%\n";
     if(soc==0){
         cout<<"BATTERIA ALLO 0%\n";
+        exit;
     }
     EnergiaPrevista = previsione(tempoAttuale);
     if(EnergiaPrevista==0){
@@ -617,6 +619,9 @@ int main(){
         {
             unique_lock<std::mutex> lck(tempo);
             tempoAttuale=tim->getTimeInMin();
+        }
+        if(tempoAttuale>1440*3){
+            break;
         }
         if(tempoAttuale>=tempoUltimaMisurazione+FINESTRAPREDIZIONE)
         {
